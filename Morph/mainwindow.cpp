@@ -3,6 +3,8 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QSizePolicy>
+#include <QSizeGrip>
+#include <QPixmap>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -43,22 +45,36 @@ void MainWindow::loadImageSlot()
 
 void MainWindow::newSubWinAfterLoadImage(QStringList paths)
 {
-    int imageNumber = paths.count();
-    QString path = paths.at(0);
-    QLabel *imageLabel = new QLabel;
-    QImage image(path);
-    imageLabel->setPixmap(QPixmap::fromImage(image));
-    imageLabel->show();
-//    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-//    sizePolicy.setHorizontalStretch(0);
-//    sizePolicy.setVerticalStretch(0);
-    newWin = new QMdiSubWindow;
+    //初始化子窗口
+    newWin = new QMdiSubWindow();
+    newWin->resize(100, 100);
+    newWin->setWindowFlags(Qt::SubWindow);
     newWin->setWindowTitle("test");
-    newWin->resize(ui->mdiArea->height()/2, ui->mdiArea->width()/2);
-    newWin->setWidget(imageLabel);
     newWin->setAttribute(Qt::WA_DeleteOnClose);
+    newWin->setGeometry(100, 100, 30, 30);
+
+    //根据路径载入图片
+    //需要修改：多选图片时
+    QString path = paths.at(0);
+    QLabel *imageLabel = new QLabel();
+    QPixmap *image = new QPixmap(path);
+    imageLabel->resize(newWin->width(), newWin->height());
+    image->scaled(imageLabel->size(), Qt::KeepAspectRatio);
+    imageLabel->setScaledContents(true);
+    imageLabel->setPixmap(*image);
+
+    //设置子窗口layout，添加控件
+    QWidget *widget = new QWidget();
+    newWin->setWidget(widget);
+    QGridLayout *layout_main = new QGridLayout(widget);
+    layout_main->setMargin(15);
+    layout_main->setSpacing(10);
+    layout_main->addWidget(imageLabel);
+    widget->setLayout(layout_main);
+    widget->resize(newWin->width(), newWin->height());
+
+    //添加子窗口到主窗口
     ui->mdiArea->addSubWindow(newWin);
     newWin->show();
-//    for()
 }
 
