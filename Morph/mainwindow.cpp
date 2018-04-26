@@ -1,10 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QFileDialog>
-#include <QDebug>
-#include <QSizePolicy>
-#include <QSizeGrip>
-#include <QPixmap>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -12,7 +7,39 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect(ui->loadImage, SIGNAL(triggered()), this, SLOT(loadImageSlot()));
+
+    numOfLabel = 0;
+
+    //set mainWindow layout
+    widget = new QWidget();
+    buttonWidget = new QWidget();
+    layout_main = new QHBoxLayout();
+//    layout_label = new QHBoxLayout();
+    layout_button = new QVBoxLayout();
+//    mdiArea = new QMdiArea();
+    customWidget = new Widget(this);
+
+    buttonWidget->setFixedWidth(40);
+
+
+//    mdiArea->addSubWindow(customWidget);
+//    customWidget->resize(mdiArea->width(), mdiArea->height());
+    customWidget->show();
+
+    layout_main->setSpacing(10);
+//    layout_main->addWidget(mdiArea);
+//    layout_main->addLayout(layout_label);
+//    layout_main->addLayout(layout_button);
+    layout_main->addWidget(customWidget);
+    layout_main->addWidget(buttonWidget);
+//    layout_main->setStretchFactor(layout_label);
+//    layout_main->setStretchFactor(layout_button);
+
+
+    widget->setLayout(layout_main);
+    setCentralWidget(widget);
+
+    connect(ui->load, SIGNAL(triggered()), this, SLOT(loadImageSlot()));
 }
 
 MainWindow::~MainWindow()
@@ -39,42 +66,35 @@ void MainWindow::loadImageSlot()
     if(fileDialog->exec())
     {
         fileNames = fileDialog->selectedFiles();
-    }
+    } else
+        return;
     newSubWinAfterLoadImage(fileNames);
 }
 
 void MainWindow::newSubWinAfterLoadImage(QStringList paths)
 {
-    //初始化子窗口
-    newWin = new QMdiSubWindow();
-    newWin->resize(100, 100);
-    newWin->setWindowFlags(Qt::SubWindow);
-    newWin->setWindowTitle("test");
-    newWin->setAttribute(Qt::WA_DeleteOnClose);
-    newWin->setGeometry(100, 100, 30, 30);
-
+    if(numOfLabel >= 2){
+        QMessageBox::information(NULL, "提示", "一次导入的图片不能超过两个", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        return;
+    }
     //根据路径载入图片
     //需要修改：多选图片时
     QString path = paths.at(0);
     QLabel *imageLabel = new QLabel();
     QPixmap *image = new QPixmap(path);
-    imageLabel->resize(newWin->width(), newWin->height());
-    image->scaled(imageLabel->size(), Qt::KeepAspectRatio);
-    imageLabel->setScaledContents(true);
-    imageLabel->setPixmap(*image);
+    if(image->isNull()){
+        QMessageBox::information(NULL, "提示", "请选择图片", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        return;
+    }
+//    imageLabel->resize(this->width()/2, this->height());
+//    image->scaled(imageLabel->size(), Qt::KeepAspectRatio);
+//    imageLabel->setScaledContents(true);
+//    imageLabel->setPixmap(*image);
+    customWidget->CreateLabel(image, numOfLabel);
 
+//    ListOfLabels[numOfLabel] = imageLabel;
     //设置子窗口layout，添加控件
-    QWidget *widget = new QWidget();
-    newWin->setWidget(widget);
-    QGridLayout *layout_main = new QGridLayout(widget);
-    layout_main->setMargin(15);
-    layout_main->setSpacing(10);
-    layout_main->addWidget(imageLabel);
-    widget->setLayout(layout_main);
-    widget->resize(newWin->width(), newWin->height());
+//    layout_label->addWidget(imageLabel);
+    ++numOfLabel;
 
-    //添加子窗口到主窗口
-    ui->mdiArea->addSubWindow(newWin);
-    newWin->show();
 }
-

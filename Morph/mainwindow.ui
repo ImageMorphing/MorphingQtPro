@@ -6,23 +6,37 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>703</width>
-    <height>497</height>
+    <width>704</width>
+    <height>462</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QMdiArea" name="mdiArea"/>
-      </item>
-     </layout>
-    </item>
-   </layout>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>704</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="load"/>
+   </widget>
+   <addaction name="menu"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -33,38 +47,9 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>703</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menu_2">
-    <property name="title">
-     <string>文件</string>
-    </property>
-    <widget class="QMenu" name="menu">
-     <property name="title">
-      <string>导入</string>
-     </property>
-     <addaction name="loadImage"/>
-     <addaction name="action_3"/>
-    </widget>
-    <addaction name="menu"/>
-   </widget>
-   <addaction name="menu_2"/>
-  </widget>
-  <action name="loadImage">
+  <action name="load">
    <property name="text">
-    <string>导入图像</string>
-   </property>
-  </action>
-  <action name="action_3">
-   <property name="text">
-    <string>导入视频</string>
+    <string>导入</string>
    </property>
   </action>
  </widget>

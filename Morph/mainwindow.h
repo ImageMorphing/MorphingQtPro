@@ -2,9 +2,19 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSize>
-#include <QMdiSubWindow>
 #include <QLabel>
+#include <QSize>
+#include <QFileDialog>
+#include <QDebug>
+#include <QSizePolicy>
+#include <QSizeGrip>
+#include <QPixmap>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QMessageBox>
+#include <QVBoxLayout>
+#include <QMdiArea>
+#include "widget.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,15 +27,29 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+//public slots
 public slots:
     void loadImageSlot();
-
-private:
-    Ui::MainWindow *ui;
-    QMdiSubWindow *newWin;
-
     void newSubWinAfterLoadImage(QStringList paths);
 
+//private variables
+private:
+    Ui::MainWindow *ui;
+
+    //for layout
+    QWidget *widget, *buttonWidget;
+    QHBoxLayout *layout_main/*, *layout_label*/;
+    QGridLayout *layout_label;
+    QVBoxLayout *layout_button;
+
+    //for widget
+    QMdiArea *mdiArea;
+    Widget *customWidget;
+
+
+    int numOfLabel;
+    QLabel *ListOfLabels[2];
 };
 
 #endif // MAINWINDOW_H
