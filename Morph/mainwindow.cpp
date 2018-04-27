@@ -7,33 +7,22 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->resize(QApplication::desktop()->width(), QApplication::desktop()->height());
 
     numOfLabel = 0;
 
     //set mainWindow layout
     widget = new QWidget();
-    buttonWidget = new QWidget();
+    settingWidget = new QWidget();
     layout_main = new QHBoxLayout();
-//    layout_label = new QHBoxLayout();
-    layout_button = new QVBoxLayout();
-//    mdiArea = new QMdiArea();
     customWidget = new Widget(this);
 
-    buttonWidget->setFixedWidth(40);
-
-
-//    mdiArea->addSubWindow(customWidget);
-//    customWidget->resize(mdiArea->width(), mdiArea->height());
+    settingWidget->setFixedWidth(200);
     customWidget->show();
 
     layout_main->setSpacing(10);
-//    layout_main->addWidget(mdiArea);
-//    layout_main->addLayout(layout_label);
-//    layout_main->addLayout(layout_button);
+    layout_main->addWidget(settingWidget);
     layout_main->addWidget(customWidget);
-    layout_main->addWidget(buttonWidget);
-//    layout_main->setStretchFactor(layout_label);
-//    layout_main->setStretchFactor(layout_button);
 
 
     widget->setLayout(layout_main);
@@ -80,21 +69,11 @@ void MainWindow::newSubWinAfterLoadImage(QStringList paths)
     //根据路径载入图片
     //需要修改：多选图片时
     QString path = paths.at(0);
-    QLabel *imageLabel = new QLabel();
     QPixmap *image = new QPixmap(path);
     if(image->isNull()){
         QMessageBox::information(NULL, "提示", "请选择图片", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
         return;
     }
-//    imageLabel->resize(this->width()/2, this->height());
-//    image->scaled(imageLabel->size(), Qt::KeepAspectRatio);
-//    imageLabel->setScaledContents(true);
-//    imageLabel->setPixmap(*image);
     customWidget->CreateLabel(image, numOfLabel);
-
-//    ListOfLabels[numOfLabel] = imageLabel;
-    //设置子窗口layout，添加控件
-//    layout_label->addWidget(imageLabel);
     ++numOfLabel;
-
 }

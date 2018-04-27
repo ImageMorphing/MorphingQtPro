@@ -14,6 +14,7 @@
 #include <QMessageBox>
 #include <QVBoxLayout>
 #include <QMdiArea>
+#include <QDesktopWidget>
 #include "widget.h"
 
 namespace Ui {
@@ -38,10 +39,8 @@ private:
     Ui::MainWindow *ui;
 
     //for layout
-    QWidget *widget, *buttonWidget;
+    QWidget *widget, *settingWidget;
     QHBoxLayout *layout_main/*, *layout_label*/;
-    QGridLayout *layout_label;
-    QVBoxLayout *layout_button;
 
     //for widget
     QMdiArea *mdiArea;
