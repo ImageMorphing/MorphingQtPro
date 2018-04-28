@@ -38,7 +38,7 @@ DISTNAME      = Morph1.0.0
 DISTDIR = /Users/aUcid/Desktop/MorphingQtPro/build-Morph-Desktop_Qt_5_10_1_clang_64bit-Debug/.tmp/Morph1.0.0
 LINK          = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 LFLAGS        = -stdlib=libc++ -headerpad_max_install_names $(EXPORT_ARCH_ARGS) -Wl,-syslibroot,/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk -mmacosx-version-min=10.10 -Wl,-rpath,@executable_path/Frameworks -Wl,-rpath,/Users/aUcid/Qt/5.10.1/clang_64/lib
-LIBS          = $(SUBLIBS) -F/Users/aUcid/Qt/5.10.1/clang_64/lib -L/usr/local/lib -lopencv_core -lopencv_highgui -lopencv_imgproc -framework QtWidgets -framework QtGui -framework QtCore -framework DiskArbitration -framework IOKit -framework OpenGL -framework AGL 
+LIBS          = $(SUBLIBS) -F/Users/aUcid/Qt/5.10.1/clang_64/lib -L/usr/local/Cellar/opencv/3.4.1_4/lib -lopencv_stitching -lopencv_superres -lopencv_videostab -lopencv_aruco -lopencv_bgsegm -lopencv_bioinspired -lopencv_ccalib -lopencv_dnn -lopencv_dpm -lopencv_fuzzy -lopencv_line_descriptor -lopencv_optflow -lopencv_plot -lopencv_reg -lopencv_saliency -lopencv_stereo -lopencv_structured_light -lopencv_rgbd -lopencv_surface_matching -lopencv_tracking -lopencv_datasets -lopencv_face -lopencv_xfeatures2d -lopencv_shape -lopencv_video -lopencv_ximgproc -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_xobjdetect -lopencv_objdetect -lopencv_ml -lopencv_xphoto -lopencv_highgui -lopencv_videoio -lopencv_imgcodecs -lopencv_photo -lopencv_imgproc -lopencv_core -framework QtWidgets -framework QtGui -framework QtCore -framework DiskArbitration -framework IOKit -framework OpenGL -framework AGL 
 AR            = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar cq
 RANLIB        = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib -s
 SED           = sed
@@ -1264,7 +1264,67 @@ image_meshwrap.o: ../Morph/image_meshwrap.cpp ../Morph/image_meshwrap.h \
 		../Morph/catmullrom.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o image_meshwrap.o ../Morph/image_meshwrap.cpp
 
-catmullrom.o: ../Morph/catmullrom.cpp ../Morph/catmullrom.h
+catmullrom.o: ../Morph/catmullrom.cpp ../Morph/catmullrom.h \
+		../Morph/image_meshwrap.h \
+		/usr/local/include/opencv2/imgproc.hpp \
+		/usr/local/include/opencv2/core.hpp \
+		/usr/local/include/opencv2/core/cvdef.h \
+		/usr/local/include/opencv2/cvconfig.h \
+		/usr/local/include/opencv2/core/hal/interface.h \
+		/usr/local/include/opencv2/core/cv_cpu_dispatch.h \
+		/usr/local/include/opencv2/core/cv_cpu_helper.h \
+		/usr/local/include/opencv2/core/version.hpp \
+		/usr/local/include/opencv2/core/base.hpp \
+		/usr/local/include/opencv2/opencv_modules.hpp \
+		/usr/local/include/opencv2/core/cvstd.hpp \
+		/usr/local/include/opencv2/core/ptr.inl.hpp \
+		/usr/local/include/opencv2/core/neon_utils.hpp \
+		/usr/local/include/opencv2/core/vsx_utils.hpp \
+		/usr/local/include/opencv2/core/traits.hpp \
+		/usr/local/include/opencv2/core/matx.hpp \
+		/usr/local/include/opencv2/core/saturate.hpp \
+		/usr/local/include/opencv2/core/fast_math.hpp \
+		/usr/local/include/opencv2/core/types.hpp \
+		/usr/local/include/opencv2/core/mat.hpp \
+		/usr/local/include/opencv2/core/bufferpool.hpp \
+		/usr/local/include/opencv2/core/mat.inl.hpp \
+		/usr/local/include/opencv2/core/persistence.hpp \
+		/usr/local/include/opencv2/core/operations.hpp \
+		/usr/local/include/opencv2/core/cvstd.inl.hpp \
+		/usr/local/include/opencv2/core/utility.hpp \
+		/usr/local/include/opencv2/core/core_c.h \
+		/usr/local/include/opencv2/core/types_c.h \
+		/usr/local/include/opencv2/core/optim.hpp \
+		/usr/local/include/opencv2/core/ovx.hpp \
+		/usr/local/include/opencv2/imgproc/imgproc_c.h \
+		/usr/local/include/opencv2/imgproc/types_c.h \
+		/usr/local/include/opencv2/highgui.hpp \
+		/usr/local/include/opencv2/imgcodecs.hpp \
+		/usr/local/include/opencv2/videoio.hpp \
+		/usr/local/include/opencv2/highgui/highgui_c.h \
+		/usr/local/include/opencv2/imgcodecs/imgcodecs_c.h \
+		/usr/local/include/opencv2/videoio/videoio_c.h \
+		../Morph/image_util.h \
+		../Morph/image_io_processor.h \
+		/usr/local/include/opencv/cv.hpp \
+		/usr/local/include/opencv/cv.h \
+		/usr/local/include/opencv2/photo/photo_c.h \
+		/usr/local/include/opencv2/video/tracking_c.h \
+		/usr/local/include/opencv2/objdetect/objdetect_c.h \
+		/usr/local/include/opencv2/photo.hpp \
+		/usr/local/include/opencv2/video.hpp \
+		/usr/local/include/opencv2/video/tracking.hpp \
+		/usr/local/include/opencv2/video/background_segm.hpp \
+		/usr/local/include/opencv2/features2d.hpp \
+		/usr/local/include/opencv2/flann/miniflann.hpp \
+		/usr/local/include/opencv2/flann/defines.h \
+		/usr/local/include/opencv2/flann/config.h \
+		/usr/local/include/opencv2/calib3d.hpp \
+		/usr/local/include/opencv2/core/affine.hpp \
+		/usr/local/include/opencv2/calib3d/calib3d_c.h \
+		/usr/local/include/opencv2/objdetect.hpp \
+		/usr/local/include/opencv2/objdetect/detection_based_tracker.hpp \
+		../Morph/typedef_cxx.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o catmullrom.o ../Morph/catmullrom.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
