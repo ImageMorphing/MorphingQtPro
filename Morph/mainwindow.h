@@ -12,8 +12,6 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QMessageBox>
-#include <QVBoxLayout>
-#include <QMdiArea>
 #include <QDesktopWidget>
 #include "widget.h"
 
@@ -40,10 +38,9 @@ private:
 
     //for layout
     QWidget *widget, *settingWidget;
-    QHBoxLayout *layout_main/*, *layout_label*/;
+    QHBoxLayout *layout_main;
 
     //for widget
-    QMdiArea *mdiArea;
     Widget *customWidget;
 
 

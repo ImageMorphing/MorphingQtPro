@@ -14,11 +14,10 @@ protected slots:
 
 public:
     void CreateLabel(QPixmap *image, int labelNum);
+    void chooseLabel(int num);
 
 private:
     QLabel *listOfLabel[2];
     QLabel *choosenLabel;
-    void chooseLabel(int num);
-//    QLabel *label;
 };
 #endif // WIDGET_H

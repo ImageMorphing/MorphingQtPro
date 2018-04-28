@@ -24,9 +24,12 @@ MainWindow::MainWindow(QWidget *parent) :
     layout_main->addWidget(settingWidget);
     layout_main->addWidget(customWidget);
 
+    //set settingWidget
+//    settingWidget
+
 
     widget->setLayout(layout_main);
-    setCentralWidget(widget);
+    this->setCentralWidget(widget);
 
     connect(ui->load, SIGNAL(triggered()), this, SLOT(loadImageSlot()));
 }
