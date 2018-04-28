@@ -26,11 +26,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    widget.cpp
+    widget.cpp \
+    image_io_processor.cpp \
+    image_seperator.cpp \
+    image_merger.cpp \
+    image_util.cpp \
+    image_morph.cpp \
+    image_meshwrap.cpp \
+    catmullrom.cpp
 
 HEADERS += \
         mainwindow.h \
-    widget.h
+    widget.h \
+    image_io_processor.h \
+    typedef_cxx.h \
+    image_seperator.h \
+    image_merger.h \
+    image_util.h \
+    image_morph.h \
+    image_meshwrap.h \
+    catmullrom.h
 
 FORMS += \
         mainwindow.ui
