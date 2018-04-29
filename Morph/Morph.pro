@@ -33,7 +33,8 @@ SOURCES += \
     image_util.cpp \
     image_morph.cpp \
     image_meshwrap.cpp \
-    catmullrom.cpp
+    catmullrom.cpp \
+    main_component.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -45,7 +46,8 @@ HEADERS += \
     image_util.h \
     image_morph.h \
     image_meshwrap.h \
-    catmullrom.h
+    catmullrom.h \
+    main_component.h
 
 FORMS += \
         mainwindow.ui
