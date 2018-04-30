@@ -16,12 +16,12 @@ public:
     ~image_io_processor();
 
     // file I/O related
-    bool save_image_as_object(std::string img_name, const cv::Mat mat);
-    bool save_image_as_object(std::string img_name, const IplImage* img);
+    void save_image_as_object(std::string img_name, const cv::Mat mat);
+    void save_image_as_object(std::string img_name, const IplImage* img);
     IplImage* load_image_as_object(std::string img_name);
 
-    bool save_image(std::string img_name, cv::Mat mat);
-    bool save_image(std::string img_name, IplImage *img);
+    void save_image(std::string img_name, cv::Mat mat);
+    void save_image(std::string img_name, IplImage *img);
 
     IplImage* load_image(std::string img_name);
 
@@ -29,13 +29,13 @@ public:
     IplImage* init_image(CvSize size, int depth, int channels);
 
     // image check related
-    bool show_image(IplImage *img, std::string img_name = "");
+    void show_image(IplImage *img, std::string img_name = "");
 
     // image generate related
     IplImage* gene_image(IplImage* r, IplImage *g, IplImage *b, IplImage *res_img = 0);
 
     // image convert related
-    bool conv_image(IplImage* img, char** img_ptr, int index = -1);
+    void conv_image(IplImage* img, char** img_ptr, int index = -1);
 
 private:
     std::string path;
