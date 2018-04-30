@@ -1,20 +1,20 @@
 #include "catmullrom.h"
 
 void catmullRom(float *x1, float *y1, int len1, float *x2, float *y2, int len2) {
-    int i, j, dir, j1, j2;
+    int j, dir, j1, j2;
     double x,  dx1, dx2;
     double dx, dy, yd1, yd2, p1, p2, p3;
     double a0y, a1y, a2y, a3y;
 
     /* find direction of monotonic x1; skip ends */
-    if(x1[0] < x1[1]) { /* increasing */
-        if(x2[0]<x1[0] || x2[len2-1]>x1[len1-1]) dir=0;
+    if (x1[0] < x1[1]) { /* increasing */
+        if (x2[0] < x1[0] || x2[len2-1] > x1[len1-1]) dir = 0;
         else dir = 1;
     } else {  /* decreasing */
-        if(x2[0]>x1[0] || x2[len2-1]<x1[len1-1]) dir=0;
+        if (x2[0] > x1[0] || x2[len2-1] < x1[len1-1]) dir = 0;
         else dir = -1;
     }
-    if(dir == 0) {   /* error */
+    if (dir == 0) {   /* error */
         std::cerr << "catmullRom: Output x-coord out of range of input\n";
         return;
     }
@@ -26,20 +26,20 @@ void catmullRom(float *x1, float *y1, int len1, float *x2, float *y2, int len2) 
      */
 
     /* force coefficient initialization */
-    if(dir==1) p3 = x2[0] - 1;
+    if (dir==1) p3 = x2[0] - 1;
     else  p3 = x2[0] + 1;
 
-    for(i=0; i<len2; i++) {
+    for (int i = 0; i < len2; i ++) {
         /* check if in new interval */
         p2 = x2[i];
-        if((dir==1 && p2>p3) || (dir== -1 && p2<p3)) {
+        if ((dir == 1 && p2 > p3) || (dir == -1 && p2 < p3)) {
             /* find the interval which contains p2 */
-            if(dir) {
-                for(j=0; j<len1 && p2>x1[j]; j++);
-                if(p2 < x1[j]) j--;
+            if (dir) {
+                for (j = 0; j < len1 && p2 > x1[j]; j ++);
+                if (p2 < x1[j]) j--;
             } else {
-                for(j=0; j<len1 && p2<x1[j]; j++);
-                if(p2 > x1[j]) j--;
+                for (j = 0; j < len1 && p2 < x1[j]; j ++);
+                if (p2 > x1[j]) j--;
             }
 
             p1 = x1[j];  /* update 1st endpt */
@@ -58,12 +58,12 @@ void catmullRom(float *x1, float *y1, int len1, float *x2, float *y2, int len2) 
             yd2 = (y1[j2 ] - y1[ j ]) * dx2;
             a0y =  y1[j];
             a1y =  yd1;
-            a2y =  dx *  ( 3*dy - 2*yd1 - yd2);
-            a3y =  dx*dx*(-2*dy +   yd1 + yd2);
+            a2y =  dx *  ( 3 * dy - 2 * yd1 - yd2);
+            a3y =  dx * dx * (-2 * dy +   yd1 + yd2);
         }
         /* use Horner's rule to calculate cubic polynomial */
         x = p2 - p1;
-        y2[i] = ((a3y*x + a2y)*x + a1y)*x + a0y;
+        y2[i] = ((a3y * x + a2y) * x + a1y) * x + a0y;
     }
 }
 

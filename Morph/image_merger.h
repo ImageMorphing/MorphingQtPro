@@ -7,6 +7,8 @@
 #include <highgui.hpp>
 #include <core/utility.hpp>
 
+#include <QMessageBox>
+
 #include "image_io_processor.h"
 
 class image_merger {
@@ -27,6 +29,8 @@ private:
     IplImage* res_img;
 
     image_io_processor img_pro;
+
+    void execute_error_hint(std::string, std::string, std::string detailed_text = "");
 };
 
 

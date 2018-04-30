@@ -2,10 +2,13 @@
 #define IMAGE_IO_PROCESSOR_H
 
 #include <iostream>
+#include <cassert>
 
 #include <cv.hpp>
 #include <highgui.hpp>
 #include <imgproc.hpp>
+
+#include <QMessageBox>
 
 class image_io_processor {
 public:
@@ -35,11 +38,13 @@ public:
     void conv_image(IplImage* img, char** img_ptr, int index = -1);
 
 private:
+    std::string path;
+
     // image generate related
     IplImage* gene_image_by_3x3(IplImage *r_channel, IplImage *g_channel, IplImage *b_channel, IplImage *res_img = 0);
     IplImage* gene_image_by_3x1(IplImage *r_plane, IplImage *g_plane, IplImage *b_plane, IplImage *res_img = 0);
 
-    std::string path;
+    void execute_error_hint(std::string text, std::string informative_text, std::string detailed_text = "");
 };
 
 

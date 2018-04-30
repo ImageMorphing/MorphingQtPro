@@ -32,6 +32,8 @@ private:
 
     image_ptr tran_image(IplImage*);
     image_ptr tran_image(FILE*);
+
+    void execute_error_hint(std::string, std::string, std::string detailed_text = "");
 };
 
 

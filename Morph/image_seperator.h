@@ -23,6 +23,8 @@ private:
     std::string path;
 
     image_io_processor img_pro;
+
+    void execute_error_hint(std::string, std::string, std::string detailed_text = "");
 };
 
 

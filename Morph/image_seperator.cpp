@@ -3,7 +3,7 @@
 image_seperator::image_seperator(std::string file_addr): img_pro(file_addr) {
     if (file_addr.empty()) {
         std::cout << stderr << "Empty Str Received" << std::endl;
-        exit(1);
+        throw "IMAGE_SEPERATOR Error", "Received empty string as file path";
     }
     if (file_addr[file_addr.size() - 1] != '/') {
         file_addr += '/';
@@ -32,6 +32,26 @@ void image_seperator::sepe_image(std::string img_name) {
 
     // output the blue channel BW file
     img_pro.save_image_as_object(img_name + "_b.obj", b_plane);
+}
+
+void image_seperator::execute_error_hint(std::string text, std::string informative_text, std::string detailed_text) {
+    QMessageBox msg_box;
+    msg_box.setText(QString(text.c_str()));
+    msg_box.setInformativeText(QString(informative_text.c_str()));
+    if (!detailed_text.empty())
+        msg_box.setDetailedText(QString(detailed_text.c_str()));
+    msg_box.setStandardButtons(QMessageBox::Ok);
+    msg_box.setDefaultButton(QMessageBox::Ok);
+
+    int ret = msg_box.exec();
+    switch (ret) {
+    case QMessageBox::Ok:
+        std::cout << "Ok" << std::endl;;
+        break;
+    default:
+        assert("Unexpected Button Type");
+        break;
+    }
 }
 
 void image_seperator::__check_path__() {

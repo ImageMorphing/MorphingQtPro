@@ -5,11 +5,11 @@ main_component::main_component(std::string file_addr, std::string base_name, uns
     this->file_addr = file_addr;
     if (file_addr.empty()) {
         std::cout << stderr << "Empty Str Received" << std::endl;
-        exit(1);
+        throw "Received empty string as file path";
     }
     if (base_name.empty()) {
         std::cout << stderr << "Empty Str Received" << std::endl;
-        exit(1);
+        throw "Received empty string as basename";
     }
     if (file_addr[file_addr.size() - 1] != '/') {
         this->file_addr += '/';

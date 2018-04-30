@@ -5,7 +5,9 @@ void image_morph(const IplImage* I1, const IplImage* I2, const image_ptr M1, con
 
     if (I1->nChannels != 1) {
         std::cout << stderr << "Unexpected Dimension Received" << std::endl;
-        exit(1);
+        std::stringstream strstream;
+        strstream << I1->nChannels;
+        execute_error_hint_morph("IMAGE_MORPH Error", "Received unexpected dimension: " + strstream.str());
     }
 
     double  w1, w2;
@@ -70,4 +72,23 @@ void image_morph(const IplImage* I1, const IplImage* I2, const image_ptr M1, con
     std::cout << "Finished Frame " << frame_num << std::endl;
 }
 
+void execute_error_hint_morph(std::string text, std::string informative_text, std::string detailed_text) {
+    QMessageBox msg_box;
+    msg_box.setText(QString(text.c_str()));
+    msg_box.setInformativeText(QString(informative_text.c_str()));
+    if (!detailed_text.empty())
+        msg_box.setDetailedText(QString(detailed_text.c_str()));
+    msg_box.setStandardButtons(QMessageBox::Ok);
+    msg_box.setDefaultButton(QMessageBox::Ok);
+
+    int ret = msg_box.exec();
+    switch (ret) {
+    case QMessageBox::Ok:
+        std::cout << "Ok" << std::endl;;
+        break;
+    default:
+        assert("Unexpected Button Type");
+        break;
+    }
+}
 

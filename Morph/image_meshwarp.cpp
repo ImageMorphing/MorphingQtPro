@@ -4,7 +4,8 @@ void image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
 
     if (I1 == 0 || I2 == 0) {
         std::cout << stderr << "Empty Ptr Received" << std::endl;
-        exit(1);
+        execute_error_hint_meshwarp("IMAGE_MESHWARP Error", "Received Empty Pointer");
+        // Using Qt Message Box
     }
 
     image_util img_utl = image_util("/Users/aUcid/Desktop/image_morphing/image/");
@@ -211,5 +212,25 @@ void resample(char *src, int len, int offst, float *xmap, char *dst)
             sizfac = outseg;
             u++;
         }
+    }
+}
+
+void execute_error_hint_meshwarp(std::string text, std::string informative_text, std::string detailed_text) {
+    QMessageBox msg_box;
+    msg_box.setText(QString(text.c_str()));
+    msg_box.setInformativeText(QString(informative_text.c_str()));
+    if (!detailed_text.empty())
+        msg_box.setDetailedText(QString(detailed_text.c_str()));
+    msg_box.setStandardButtons(QMessageBox::Ok);
+    msg_box.setDefaultButton(QMessageBox::Ok);
+
+    int ret = msg_box.exec();
+    switch (ret) {
+    case QMessageBox::Ok:
+        std::cout << "OK" << std::endl;
+        break;
+    default:
+        assert("Unexpected Button Type");
+        break;
     }
 }

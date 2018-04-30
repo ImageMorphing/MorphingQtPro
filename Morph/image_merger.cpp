@@ -3,7 +3,7 @@
 image_merger::image_merger(std::string file_addr): img_pro(file_addr) {
     if (file_addr.empty()) {
         std::cout << stderr << "Empty Str Received" << std::endl;
-        exit(1);
+        throw "IMAGE_MERGER Error", "Received empty string as file path";
     }
     if (file_addr[file_addr.size() - 1] != '/') {
         file_addr += '/';
@@ -31,6 +31,26 @@ IplImage* image_merger::get_merged_image() {
         return res_img;
     }
     return (IplImage *)0;
+}
+
+void image_merger::execute_error_hint(std::string text, std::string informative_text, std::string detailed_text) {
+    QMessageBox msg_box;
+    msg_box.setText(QString(text.c_str()));
+    msg_box.setInformativeText(QString(informative_text.c_str()));
+    if (!detailed_text.empty())
+        msg_box.setDetailedText(QString(detailed_text.c_str()));
+    msg_box.setStandardButtons(QMessageBox::Ok);
+    msg_box.setDefaultButton(QMessageBox::Ok);
+
+    int ret = msg_box.exec();
+    switch (ret) {
+    case QMessageBox::Ok:
+        std::cout << "Ok" << std::endl;;
+        break;
+    default:
+        assert("Unexpected Button Type");
+        break;
+    }
 }
 
 void image_merger::__check_path__() {

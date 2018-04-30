@@ -3,7 +3,7 @@
 image_io_processor::image_io_processor(std::string file_addr) {
     if (file_addr.empty()) {
         std::cout << stderr << "Empty Str Received" << std::endl;
-        exit(1);
+        throw "IMAGE_IO_PROCESSOR Error", "Received empty string as file path";
     }
     if (file_addr[file_addr.size() - 1] != '/') {
         file_addr += '/';
@@ -23,8 +23,8 @@ void image_io_processor::save_image_as_object(std::string img_name, const cv::Ma
     std::string img_path = path + img_name;
     IplImage img = IplImage(mat);
     if (img.nChannels != 1) {
-        std::cout << stderr << "This function only accept IplImage with 1 channels, please merge before call this function" << std::endl;
-        exit(1);
+        std::cout << stderr << "This function only accept IplImage with 1 channels, please split before call this function" << std::endl;
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "This function only accept IplImage with 1 channels, please split before call this function");
     }
     cvSave(img_path.data(), &img);
 }
@@ -33,24 +33,24 @@ void image_io_processor::save_image_as_object(std::string img_name, const IplIma
     std::string img_path = path + img_name;
     if (img_name.empty()) {
         std::cout << stderr << "Empty Str Received" << std::endl;
-        exit(1);
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received empty string as file path");
     }
     if (img) {
         if (img->nChannels != 1) {
-            std::cout << stderr << "This function only accept IplImage with 1 channels, please merge before call this function" << std::endl;
-            exit(1);
+            std::cout << stderr << "This function only accept IplImage with 1 channels, please split before call this function" << std::endl;
+            execute_error_hint("IMAGE_IO_PROCESSOR Error", "This function only accept IplImage with 1 channels, please split before call this function");
         }
         cvSave(img_path.data(), img);
     } else {
         std::cout << stderr << "Empty Ptr Received" << std::endl;
-        exit(1);
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received empty pointer");
     }
 }
 
 IplImage* image_io_processor::load_image_as_object(std::string img_name) {
     if (img_name.empty()) {
         std::cout << stderr << "Empty Str Received" << std::endl;
-        exit(1);
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received empty string as file path");
     }
     std::string img_path = path + img_name;
     return (IplImage *)cvLoad(img_path.data());
@@ -59,35 +59,35 @@ IplImage* image_io_processor::load_image_as_object(std::string img_name) {
 void image_io_processor::save_image(std::string img_name, cv::Mat mat) {
     if (img_name.empty()) {
         std::cout << stderr << "Empty Str Received" << std::endl;
-        exit(1);
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received empty string as file path");
     }
     std::string img_path = path + img_name;
     cv::imwrite(img_path, mat);
-//    IplImage *img = new IplImage(mat);
-//    cvSaveImage(img_path.c_str(), img);
 }
 
 void image_io_processor::save_image(std::string img_name, IplImage *img) {
     if (img == 0) {
         std::cout << stderr << "Empty Ptr Received" << std::endl;
-        exit(1);
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received empty pointer");
     }
     if (img->nChannels != 3) {
         std::cout << stderr << "Unexpected Dimension Received" << std::endl;
+        std::stringstream strstream;
+        strstream << img->nChannels;
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received unexpected dimension: " + strstream.str());
     }
     if (img_name.empty()) {
         std::cout << stderr << "Empty Str Received" << std::endl;
-        exit(1);
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received empty string as file path");
     }
     std::string img_path = path + img_name;
     cv::imwrite(img_path, cv::cvarrToMat(img));
-//    cvSaveImage(img_path.c_str(), img);
 }
 
 IplImage* image_io_processor::load_image(std::string img_name) {
     if (img_name.empty()) {
         std::cout << stderr << "Empty Str Received" << std::endl;
-        exit(1);
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received empty string as file path");
     }
     std::string img_path = path + img_name;
     return cvLoadImage(img_path.data());
@@ -111,7 +111,7 @@ IplImage* image_io_processor::init_image(CvSize size, int depth, int channels) {
 void image_io_processor::show_image(IplImage *img, std::string img_name) {
     if (img == 0) {
         std::cout << stderr << "Empty Ptr Received" << std::endl;
-        exit(1);
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received empty pointer");
     }
     cvShowImage(img_name.data(), img);
     cvWaitKey();
@@ -129,7 +129,10 @@ IplImage* image_io_processor::gene_image(IplImage *r, IplImage *g, IplImage *b, 
         return this->gene_image_by_3x3(r, g, b, res);
     } else {
         std::cout << stderr << "Unexpected Channel Received" << std::endl;
-        exit(1);
+        std::stringstream strstream;
+        strstream << r->nChannels;
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "Unexpected channel received, channel: " + strstream.str());
+        return (IplImage *)0;
     }
 }
 
@@ -142,7 +145,7 @@ IplImage* image_io_processor::gene_image_by_3x3(IplImage *r_channel,
     size_ptr = size_ptr != 0 ? size_ptr : b_channel;
     if (size_ptr == 0) {
         std::cout << stderr << "Empty Ptrs Received" << std::endl;
-        exit(1);
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received empty pointer");
     }
 
     IplImage *res = res_img;
@@ -171,7 +174,7 @@ IplImage* image_io_processor::gene_image_by_3x1(IplImage *r_plane,
     size_ptr = size_ptr != 0 ? size_ptr : b_plane;
     if (size_ptr == 0) {
         std::cout << stderr << "Empty Ptrs Received" << std::endl;
-        exit(1);
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received empty pointers");
     }
 
     IplImage *res = res_img;
@@ -192,7 +195,7 @@ IplImage* image_io_processor::gene_image_by_3x1(IplImage *r_plane,
 void image_io_processor::conv_image(IplImage *img, char** img_ptr, int index) {
     if (img == 0 || img_ptr == 0) {
         std::cout << stderr << "Empty Ptr Received" << std::endl;
-        exit(1);
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received empty pointer");
     }
     int width = img->width,
         height = img->height;
@@ -206,7 +209,9 @@ void image_io_processor::conv_image(IplImage *img, char** img_ptr, int index) {
     } else if (img->nChannels == 3) {
         if (index < 0) {
             std::cout << stderr << "Index of Dimension 3 must have a positive value" << std::endl;
-            exit(1);
+            std::stringstream strstream;
+            strstream << index;
+            execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received unexpected index: " + strstream.str());
         }
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -215,7 +220,31 @@ void image_io_processor::conv_image(IplImage *img, char** img_ptr, int index) {
         }
     } else {
         std::cout << stderr << "Unexpected Dimension Received" << std::endl;
-        exit(1);
+        std::stringstream strstream;
+        strstream << img->nChannels;
+        execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received unexpected dimension: " + strstream.str());
+    }
+}
+
+
+
+void image_io_processor::execute_error_hint(std::string text, std::string informative_text, std::string detailed_text) {
+    QMessageBox msg_box;
+    msg_box.setText(QString(text.c_str()));
+    msg_box.setInformativeText(QString(informative_text.c_str()));
+    if (!detailed_text.empty())
+        msg_box.setDetailedText(QString(detailed_text.c_str()));
+    msg_box.setStandardButtons(QMessageBox::Ok);
+    msg_box.setDefaultButton(QMessageBox::Ok);
+
+    int ret = msg_box.exec();
+    switch (ret) {
+    case QMessageBox::Ok:
+        std::cout << "Ok" << std::endl;;
+        break;
+    default:
+        assert("Unexpected Button Type");
+        break;
     }
 }
 
