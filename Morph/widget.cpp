@@ -6,6 +6,9 @@
 Widget::Widget(QWidget *parent):QWidget(parent)
 {
     setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
+    listOfLabel[0] = NULL;
+    listOfLabel[1] = NULL;
+    choosenLabel = NULL;
 }
 
 bool Widget::eventFilter(QObject *, QEvent *evt)
@@ -34,7 +37,7 @@ bool Widget::eventFilter(QObject *, QEvent *evt)
     return false;
 }
 
-void Widget::CreateLabel(QPixmap *image, int labelNum)
+void Widget::CreateLabel(QPixmap *image)
 {
     QLabel *label = new QLabel(this);
     label->setScaledContents(true);
@@ -43,9 +46,58 @@ void Widget::CreateLabel(QPixmap *image, int labelNum)
     label->installEventFilter(this);
     label->show();
     choosenLabel = label;
-    listOfLabel[labelNum] = label;
+    if(listOfLabel[0] == NULL)
+        listOfLabel[0] = label;
+    else if (listOfLabel[1] == NULL)
+        listOfLabel[1] = label;
+    Mesh *mesh = new Mesh(label->size(), this);
+    mesh->show();
 }
 
 void Widget::chooseLabel(int num){
-    choosenLabel = listOfLabel[num];
+    if(listOfLabel[num] != NULL){
+        choosenLabel = listOfLabel[num];
+        choosenLabel->raise();
+    }
 }
+
+void Widget::scaleUpImage()
+{
+    if(choosenLabel != NULL){
+        int width = choosenLabel->width(), height = choosenLabel->height();
+        choosenLabel->resize(width * 1.1, height * 1.1);
+    }
+}
+
+void Widget::scalDownImage()
+{
+    if(choosenLabel != NULL){
+        int width = choosenLabel->width(), height = choosenLabel->height();
+        choosenLabel->resize(width * 0.9, height * 0.9);
+    }
+}
+
+void Widget::loadNewImage(QPixmap *image)
+{
+    if(choosenLabel != NULL){
+        choosenLabel->setPixmap(*image);
+    }
+}
+
+void Widget::deleteImage()
+{
+    if(choosenLabel != NULL){
+        if(listOfLabel[0] == choosenLabel)
+            listOfLabel[0] = NULL;
+        else if(listOfLabel[1] == choosenLabel)
+            listOfLabel[1] = NULL;
+        delete choosenLabel;
+        choosenLabel = NULL;
+        if(listOfLabel[0] != NULL)
+            choosenLabel = listOfLabel[0];
+        else if(listOfLabel[1] != NULL)
+            choosenLabel = listOfLabel[1];
+    }
+}
+
+

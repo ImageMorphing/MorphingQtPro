@@ -26,11 +26,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    widget.cpp
+    widget.cpp \
+    pointbutton.cpp \
+    mesh.cpp
 
 HEADERS += \
         mainwindow.h \
-    widget.h
+    widget.h \
+    pointbutton.h \
+    mesh.h
 
 FORMS += \
         mainwindow.ui
@@ -38,13 +42,6 @@ FORMS += \
 INCLUDEPATH += /usr/local/include
 INCLUDEPATH += /usr/local/include/opencv
 INCLUDEPATH += /usr/local/include/opencv2
-#LIBS += -L/usr/local/lib \
-# -lopencv_core \
-# -lopencv_highgui \
-# -lopencv_imgproc \
-#LIBS += -L/usr/local/lib\
-#  -lopencv_core\
-#  -lopencv_highui \
 LIBS += -L/usr/local/lib\
         -lopencv_core\
         -lopencv_highgui\

@@ -13,6 +13,9 @@
 #include <QHBoxLayout>
 #include <QMessageBox>
 #include <QDesktopWidget>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QTabWidget>
 #include "widget.h"
 
 namespace Ui {
@@ -29,16 +32,30 @@ public:
 
 //public slots
 public slots:
-    void loadImageSlot();
+    void slot_loadImage();
     void newSubWinAfterLoadImage(QStringList paths);
+    void slot_sourceImageButtonClicked();
+    void slot_targetImageButtonClicked();
+    void slot_scaleUpButton();
+    void slot_scaleDownButton();
+    void slot_loadNewImageButton();
+    void slot_deleteImageButton();
 
 //private variables
 private:
     Ui::MainWindow *ui;
 
+    void configureImageSetting();
+    void configurePointSetting();
+    void setChoosenLabel(int num);
+    QStringList loadFilePath();
+
     //for layout
     QWidget *widget, *settingWidget;
+    QWidget *imageSettingWidget, *pointSettingWidget;
+
     QHBoxLayout *layout_main;
+    QGridLayout *layout_setting, *layout_imageSetting, *layout_pointsSetting;
 
     //for widget
     Widget *customWidget;
