@@ -28,13 +28,30 @@ SOURCES += \
         mainwindow.cpp \
     widget.cpp \
     pointbutton.cpp \
-    mesh.cpp
+    mesh.cpp \
+    main_component.cpp \
+    image_util.cpp \
+    image_seperator.cpp \
+    image_morph.cpp \
+    image_meshwarp.cpp \
+    image_merger.cpp \
+    image_io_processor.cpp \
+    catmullrom.cpp
 
 HEADERS += \
         mainwindow.h \
     widget.h \
     pointbutton.h \
-    mesh.h
+    mesh.h \
+    typedef_cxx.h \
+    main_component.h \
+    image_util.h \
+    image_seperator.h \
+    image_morph.h \
+    image_meshwarp.h \
+    image_merger.h \
+    image_io_processor.h \
+    catmullrom.h
 
 FORMS += \
         mainwindow.ui
