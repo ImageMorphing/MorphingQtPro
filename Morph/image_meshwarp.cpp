@@ -9,14 +9,17 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
         // Using Qt Message Box
     }
 
-    image_util img_utl;
-    image_io_processor img_pro;
+    image_util* img_utl;
+    image_io_processor* img_pro;
 
     try {
-        img_utl = image_util("/Users/aUcid/Desktop/image_morphing/image/");
-        img_pro = image_io_processor("/Users/aUcid/Desktop/image_morphing/image/");
+        img_utl = new image_util("/Users/aUcid/Desktop/image_morphing/image/");
+        img_pro = new image_io_processor("/Users/aUcid/Desktop/image_morphing/image/");
     } catch (std::string err_log) {
+        if (img_pro) delete img_pro;
+        if (img_utl) delete img_utl;
         execute_error_hint_meshwarp("IMAGE_MESHWARP Catch: ", err_log);
+        return false;
     }
 
     int I_w = I1->width,
@@ -35,9 +38,17 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
           *map  = new float[n];
 
     char *src, *dst;
-
+    image_ptr Mx;
     /* create table of x-intercepts for source mesh's vertical splines */
-    image_ptr Mx = img_utl.allo_image(M_w, I_h, MESH);
+
+    try {
+        Mx = img_utl->allo_image(M_w, I_h, MESH);
+    } catch (std::string err_log) {
+        delete img_pro;
+        delete img_utl;
+        execute_error_hint_meshwarp("IMAGE_MESHWARP Catch: ", err_log);
+        return false;
+    }
     for (int y = 0; y < I_h; y ++)
         indx[y] = y;
 
@@ -80,7 +91,8 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
     }
 
     /* first pass: warp x using tables in Mx */
-    IplImage* I3 = img_pro.init_image(cvSize(I_w, I_h), IPL_DEPTH_8U, 1);
+    IplImage* I3 = img_pro->init_image(cvSize(I_w, I_h), IPL_DEPTH_8U, 1);
+
     x1  = (float *) Mx->ch[0];
     x2  = (float *) Mx->ch[1];
     src = I1->imageData;
@@ -100,10 +112,19 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
         x1  += M_w;
         x2  += M_w;
     }
-    img_utl.free_image(Mx);
+    img_utl->free_image(Mx);
 
     /* create table of y-intercepts for intermediate mesh's hor splines */
-    image_ptr My = img_utl.allo_image(I_w, M_h, MESH);
+    image_ptr My;
+    try {
+        My = img_utl->allo_image(I_w, M_h, MESH);
+    } catch (std::string err_log) {
+        delete img_pro;
+        delete img_utl;
+        execute_error_hint_meshwarp("IMAGE_MESHWARP Catch: ", err_log);
+        return false;
+    }
+
     x1 = (float *) M2->ch[0];
     y1 = (float *) M1->ch[1];
     y2 = (float *) My->ch[0];
@@ -163,13 +184,20 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
         src++;
         dst++;
     }
-    img_utl.free_image(My);
+    img_utl->free_image(My);
 
     delete I3;
     delete [] indx;
     delete [] xrow;
     delete [] yrow;
     delete [] map;
+
+    delete My;
+    delete Mx;
+
+    delete img_pro;
+    delete img_utl;
+
     return true;
 }
 
