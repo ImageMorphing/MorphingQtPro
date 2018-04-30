@@ -1,13 +1,14 @@
 #include "image_morph.h"
 
 
-void image_morph(const IplImage* I1, const IplImage* I2, const image_ptr M1, const image_ptr M2, int frame_num, const std::string basename) {
+bool image_morph(const IplImage* I1, const IplImage* I2, const image_ptr M1, const image_ptr M2, int frame_num, const std::string basename) {
 
     if (I1->nChannels != 1) {
         std::cout << stderr << "Unexpected Dimension Received" << std::endl;
         std::stringstream strstream;
         strstream << I1->nChannels;
         execute_error_hint_morph("IMAGE_MORPH Error", "Received unexpected dimension: " + strstream.str());
+        return false;
     }
 
     double  w1, w2;
@@ -69,7 +70,10 @@ void image_morph(const IplImage* I1, const IplImage* I2, const image_ptr M1, con
     std::ostringstream oss;
     oss << basename << "_" << frame_num << ".obj" << std::endl;
     img_pro.save_image_as_object(name, I2);
-    std::cout << "Finished Frame " << frame_num << std::endl;
+    std::stringstream strstream;
+    strstream << frame_num;
+    execute_error_hint_morph("Morph Succeed", "Finished Frame " + strstream.str());
+    return true;
 }
 
 void execute_error_hint_morph(std::string text, std::string informative_text, std::string detailed_text) {

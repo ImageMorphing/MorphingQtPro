@@ -1,20 +1,28 @@
 #include "image_merger.h"
 
-image_merger::image_merger(std::string file_addr): img_pro(file_addr) {
-    if (file_addr.empty()) {
-        std::cout << stderr << "Empty Str Received" << std::endl;
-        throw "IMAGE_MERGER Error", "Received empty string as file path";
+image_merger::image_merger(std::string file_addr)
+    try : img_pro(file_addr) {
+        if (file_addr.empty()) {
+            std::cout << stderr << "Empty Str Received" << std::endl;
+            throw "IMAGE_MERGER Error, Received empty string as file path";
+        }
+        if (file_addr[file_addr.size() - 1] != '/') {
+            file_addr += '/';
+        }
+        path = file_addr;
+        res_img = 0;
+    } catch (std::string err_log) {
+        throw err_log;
     }
-    if (file_addr[file_addr.size() - 1] != '/') {
-        file_addr += '/';
-    }
-    path = file_addr;
-    res_img = 0;
-}
 
 image_merger::~image_merger() {}
 
-void image_merger::merg_image(std::string img_name) {
+bool image_merger::merg_image(std::string img_name) {
+    if (img_name.empty()) {
+        std::cout << stderr << "IMAGE_MERGER Error, Received empty string as file path" << std::endl;
+        execute_error_hint("IMAGE_MERGER Error", "Received empty string as file path");
+        return false;
+    }
     IplImage *r_channel = img_pro.load_image_as_object(path + "r.bw"),
              *g_channel = img_pro.load_image_as_object(path + "g.bw"),
              *b_channel = img_pro.load_image_as_object(path + "b.bw");
@@ -24,6 +32,8 @@ void image_merger::merg_image(std::string img_name) {
     img_pro.gene_image(r_channel, g_channel, b_channel, res_img);
 
     img_pro.save_image(img_name, res_img);
+
+    return true;
 }
 
 IplImage* image_merger::get_merged_image() {

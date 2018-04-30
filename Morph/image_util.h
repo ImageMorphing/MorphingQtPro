@@ -19,8 +19,8 @@ public:
     image_ptr read_image_as_bw(IplImage* img);
     image_ptr read_mesh(std::string file_name);
 
-    void save_image_as_bw(image_ptr img, std::string file_name);
-    void save_mesh(image_ptr mes, std::string file_name);
+    bool save_image_as_bw(image_ptr img, std::string file_name);
+    bool save_mesh(image_ptr mes, std::string file_name);
 
     image_ptr allo_image(int width, int height, int type);
     void free_image(image_ptr ptr);

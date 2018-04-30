@@ -16,6 +16,7 @@ void catmullRom(float *x1, float *y1, int len1, float *x2, float *y2, int len2) 
     }
     if (dir == 0) {   /* error */
         std::cerr << "catmullRom: Output x-coord out of range of input\n";
+        execute_error_hint_callmullrom("CATMULLROM Error", "catmullRom: Output x-coord out of range of input");
         return;
     }
 
@@ -67,4 +68,22 @@ void catmullRom(float *x1, float *y1, int len1, float *x2, float *y2, int len2) 
     }
 }
 
+void execute_error_hint_callmullrom(std::string text, std::string informative_text, std::string detailed_text) {
+    QMessageBox msg_box;
+    msg_box.setText(QString(text.c_str()));
+    msg_box.setInformativeText(QString(informative_text.c_str()));
+    if (!detailed_text.empty())
+        msg_box.setDetailedText(QString(detailed_text.c_str()));
+    msg_box.setStandardButtons(QMessageBox::Ok);
+    msg_box.setDefaultButton(QMessageBox::Ok);
 
+    int ret = msg_box.exec();
+    switch (ret) {
+    case QMessageBox::Ok:
+        std::cout << "Ok" << std::endl;;
+        break;
+    default:
+        assert("Unexpected Button Type");
+        break;
+    }
+}

@@ -1,10 +1,11 @@
 #include "image_meshwarp.h"
 
-void image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, const IplImage* I2) {
+bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, const IplImage* I2) {
 
     if (I1 == 0 || I2 == 0) {
         std::cout << stderr << "Empty Ptr Received" << std::endl;
         execute_error_hint_meshwarp("IMAGE_MESHWARP Error", "Received Empty Pointer");
+        return false;
         // Using Qt Message Box
     }
 
@@ -162,6 +163,7 @@ void image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
     delete [] xrow;
     delete [] yrow;
     delete [] map;
+    return true;
 }
 
 
@@ -175,13 +177,12 @@ void image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
  * (unweighted averaging) for minification.
  * Based on Fant's algorithm (IEEE Computer Graphics & Applications, 1/86).
  */
-void resample(char *src, int len, int offst, float *xmap, char *dst)
-{
+void resample(char *src, int len, int offst, float *xmap, char *dst) {
     int u, x, v0, v1;
     double val, sizfac, inseg, outseg, acc, inpos[1024];
 
     /* precompute input index for each output pixel */
-    for(u=x=0; x<len; x++) {
+    for (u = x = 0; x < len; x ++) {
         while(xmap[u+1]<x) u++;
         inpos[x] = u + (double) (x-xmap[u]) / (xmap[u+1]-xmap[u]);
     }
@@ -192,9 +193,9 @@ void resample(char *src, int len, int offst, float *xmap, char *dst)
     acc = 0.;
     v0 = *src; src += offst;
     v1 = *src; src += offst;
-    for(u=1; u<len; ) {
-        val = inseg*v0 + (1-inseg)*v1;
-        if(inseg < outseg) {
+    for (u = 1; u < len; ) {
+        val = inseg * v0 + (1 - inseg) * v1;
+        if (inseg < outseg) {
             acc += (val * inseg);
             outseg -= inseg;
             inseg = 1.0;

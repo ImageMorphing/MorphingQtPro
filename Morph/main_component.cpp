@@ -1,22 +1,25 @@
 #include "main_component.h"
 
 
-main_component::main_component(std::string file_addr, std::string base_name, unsigned int frame_num):img_pro(file_addr), img_utl(file_addr) {
-    this->file_addr = file_addr;
-    if (file_addr.empty()) {
-        std::cout << stderr << "Empty Str Received" << std::endl;
-        throw "Received empty string as file path";
+main_component::main_component(std::string file_addr, std::string base_name, unsigned int frame_num)
+    try :img_pro(file_addr), img_utl(file_addr) {
+        this->file_addr = file_addr;
+        if (file_addr.empty()) {
+            std::cout << stderr << "Empty Str Received" << std::endl;
+            throw "Received empty string as file path";
+        }
+        if (base_name.empty()) {
+            std::cout << stderr << "Empty Str Received" << std::endl;
+            throw "Received empty string as basename";
+        }
+        if (file_addr[file_addr.size() - 1] != '/') {
+            this->file_addr += '/';
+        }
+        this->frame_base_name = base_name;
+        this->frame_num = frame_num;
+    } catch (std::string err_log) {
+        throw err_log;
     }
-    if (base_name.empty()) {
-        std::cout << stderr << "Empty Str Received" << std::endl;
-        throw "Received empty string as basename";
-    }
-    if (file_addr[file_addr.size() - 1] != '/') {
-        this->file_addr += '/';
-    }
-    this->frame_base_name = base_name;
-    this->frame_num = frame_num;
-}
 
 void main_component::execute(std::string scr_image_name, std::string tgt_image_name) {
     IplImage *scr_image = img_pro.load_image(scr_image_name),

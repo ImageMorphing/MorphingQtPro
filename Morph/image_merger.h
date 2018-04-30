@@ -17,7 +17,7 @@ public:
     ~image_merger();
 
 
-    void merg_image(std::string);
+    bool merg_image(std::string);
 
     IplImage* get_merged_image();
 

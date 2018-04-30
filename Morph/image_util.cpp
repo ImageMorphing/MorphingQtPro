@@ -1,15 +1,18 @@
 #include "image_util.h"
 
-image_util::image_util(std::string file_addr):img_pro(file_addr) {
-    if (file_addr.empty()) {
-        std::cout << stderr << "Received Empty String" << std::endl;
-        throw "IMAGE_UTIL Error", "Received empty string as file path";
+image_util::image_util(std::string file_addr)
+    try : img_pro(file_addr) {
+        if (file_addr.empty()) {
+            std::cout << stderr << "Received Empty String" << std::endl;
+            throw "IMAGE_UTIL Error, Received empty string as file path";
+        }
+        path = file_addr;
+        if (file_addr[file_addr.size() - 1] != '/') {
+            path += '/';
+        }
+    } catch (std::string err_log) {
+        throw err_log;
     }
-    path = file_addr;
-    if (file_addr[file_addr.size() - 1] != '/') {
-        path += '/';
-    }
-}
 
 image_util::~image_util() {}
 
@@ -18,12 +21,14 @@ image_ptr image_util::read_image_as_bw(IplImage *img) {
     if (img == 0) {
         std::cout << stderr << "Empty Ptr Received" << std::endl;
         execute_error_hint("IMAGE_UTIL Error", "Received empty pointer");
+        return image_ptr(0);
     }
     if (img->nChannels != 1) {
         std::cout << stderr << "Unexpected Dimension Received" << std::endl;
         std::stringstream strstream;
         strstream << img->nChannels;
         execute_error_hint("IMAGE_IO_PROCESSOR Error", "Received unexpected dimension: " + strstream.str());
+        return image_ptr(0);
     }
     memcpy(img_ptr->ch[0], img->imageData, img_ptr->height * img_ptr->width);
     return img_ptr;
@@ -43,6 +48,7 @@ image_ptr image_util::read_mesh(std::string file_name) {
     if ((fin = fopen(file_path.data(), "r")) == NULL) {
         std::cout << stderr << "File doesn't exist: " << file_path << std::endl;
         execute_error_hint("IMAGE_UTIL Error", "Reading file failed: " + file_path);
+        return image_ptr(0);
     }
     auto img_ptr = tran_image(fin);
     fread(img_ptr->ch[0], img_ptr->width * img_ptr->height, 2 * sizeof(float), fin);
@@ -50,46 +56,54 @@ image_ptr image_util::read_mesh(std::string file_name) {
     return img_ptr;
 }
 
-void image_util::save_image_as_bw(image_ptr img, std::string file_name) {
+bool image_util::save_image_as_bw(image_ptr img, std::string file_name) {
     FILE* fout = 0;
     std::string file_path = path + file_name;
     if (img == 0) {
         std::cout << stderr << "Empty Ptr Received" << std::endl;
         execute_error_hint("IMAGE_UTIL Error", "Received empty pointer");
+        return false;
     }
     if (file_name.empty()) {
         std::cout << stderr << "Empty Str Received" << std::endl;
         execute_error_hint("IMAGE_UTIL Error", "Received empty string as file path");
+        return false;
     }
     if ((fout = fopen(file_path.data(), "w")) == NULL) {
         std::cout << stderr << "File doesn't exist: " << file_path << std::endl;
         execute_error_hint("IMAGE_UTIL Error", "Reading file failed: " + file_path);
+        return false;
     }
     fwrite(&img->width, sizeof(int), 1, fout);
     fwrite(&img->height, sizeof(int), 1, fout);
     fwrite(img->ch[0], img->width * img->height, 1, fout);
     fclose(fout);
+    return true;
 }
 
-void image_util::save_mesh(image_ptr mes, std::string file_name) {
+bool image_util::save_mesh(image_ptr mes, std::string file_name) {
     FILE* fout = 0;
     std::string file_path = path + file_name;
     if (mes == 0) {
         std::cout << stderr << "Empty Ptr Received" << std::endl;
         execute_error_hint("IMAGE_UTIL Error", "Received empty pointer");
+        return false;
     }
     if (file_name.empty()) {
         std::cout << stderr << "Empty Str Received" << std::endl;
         execute_error_hint("IMAGE_UTIL Error", "Received empty string as file path");
+        return false;
     }
     if ((fout = fopen(file_path.data(), "w")) == NULL) {
         std::cout << stderr << "File doesn't exist: " << file_path << std::endl;
         execute_error_hint("IMAGE_UTIL Error", "Reading file failed: " + file_path);
+        return false;
     }
     fwrite(&mes->width, sizeof(int), 1, fout);
     fwrite(&mes->height, sizeof(int), 1, fout);
     fwrite(mes->ch[0], mes->width * mes->height, 2 * sizeof(float), fout);
     fclose(fout);
+    return true;
 }
 
 image_ptr image_util::allo_image(int width, int height, int type) {

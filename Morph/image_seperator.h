@@ -15,7 +15,7 @@ public:
     ~image_seperator();
 
 
-    void sepe_image(std::string);
+    bool sepe_image(std::string);
 
     void __check_path__();
 
