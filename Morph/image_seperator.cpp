@@ -24,10 +24,21 @@ bool image_seperator::sepe_image(std::string img_name) {
         execute_error_hint("IMAGE_SEPERATOR Error", "Received empty string as file path");
         return false;
     }
-    IplImage *src_img = img_pro.load_image(img_name),
-             *r_plane = img_pro.init_image(cvGetSize(src_img), IPL_DEPTH_8U, 1),
-             *g_plane = cvCloneImage(r_plane),
-             *b_plane = cvCloneImage(r_plane);
+
+    IplImage *src_img,
+             *r_plane,
+             *g_plane,
+             *b_plane;
+
+    try {
+        src_img = img_pro.load_image(img_name);
+        r_plane = img_pro.init_image(cvGetSize(src_img), IPL_DEPTH_8U, 1);
+        g_plane = cvCloneImage(r_plane);
+        b_plane = cvCloneImage(r_plane);
+    } catch (std::string err_log) {
+        execute_error_hint("IMAGE_SEPERATOR Catch", err_log);
+        return false;
+    }
 
     cvSplit(src_img, b_plane, g_plane, r_plane, NULL);
 

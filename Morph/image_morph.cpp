@@ -15,14 +15,31 @@ bool image_morph(const IplImage* I1, const IplImage* I2, const image_ptr M1, con
     std::string name;
     char *p1, *p2, *p3;
     float *x1, *y1, *x2, *y2, *x3, *y3;
-    image_util img_utl = image_util("/Users/aUcid/Desktop/image_morphing/image/");
-    image_io_processor img_pro = image_io_processor("/Users/aUcid/Desktop/image_morphing/image/");
+
+    image_util img_utl;
+    image_io_processor img_pro;
+
+    try {
+        img_utl = image_util("/Users/aUcid/Desktop/image_morphing/image/");
+        img_pro = image_io_processor("/Users/aUcid/Desktop/image_morphing/image/");
+    } catch (std::string err_log) {
+        execute_error_hint_morph("IMAGE_MORPH Catch: ", err_log);
+    }
 
     /* allocate space for tmp images and mesh */
-    image_ptr M3 = img_utl.allo_image(M1->width, M1->height, MESH);
-    IplImage *Iw1 = img_pro.init_image(cvGetSize(I1), IPL_DEPTH_8U, 1),
-             *Iw2 = img_pro.init_image(cvGetSize(I1), IPL_DEPTH_8U, 1),
-             *I3 = img_pro.init_image(cvGetSize(I1), IPL_DEPTH_8U, 1);
+    image_ptr M3;
+    IplImage *Iw1,
+             *Iw2,
+             *I3;
+
+    try {
+        M3 = img_utl.allo_image(M1->width, M1->height, MESH);
+        Iw1 = img_pro.init_image(cvGetSize(I1), IPL_DEPTH_8U, 1),
+        Iw2 = img_pro.init_image(cvGetSize(I1), IPL_DEPTH_8U, 1),
+        I3 = img_pro.init_image(cvGetSize(I1), IPL_DEPTH_8U, 1);
+    } catch (std::string err_log) {
+        execute_error_hint_morph("IMAGE_MORPH Catch: ", err_log);
+    }
 
     /* eval total number of points in mesh (totalM) and image (totalI) */
     int totalM = M1->width * M1->height,
@@ -30,7 +47,11 @@ bool image_morph(const IplImage* I1, const IplImage* I2, const image_ptr M1, con
 
     /* copy first frame to basename_000.bw */
     name = basename + "_000.obj";
-    img_pro.save_image_as_object(name, I1);
+    try {
+        img_pro.save_image_as_object(name, I1);
+    } catch (std::string err_log) {
+        execute_error_hint_morph("IMAGE_MORPH Catch: ", err_log);
+    }
     std::cout << "Finished Frame 0" << std::endl;
 
     for (int i = 1; i < frame_num - 1; i ++) {
@@ -62,14 +83,22 @@ bool image_morph(const IplImage* I1, const IplImage* I2, const image_ptr M1, con
         std::ostringstream oss;
         oss << basename << "_" << i << ".obj" << std::endl;
         name = oss.str();
-        img_pro.save_image_as_object(name, I3);
+        try {
+            img_pro.save_image_as_object(name, I3);
+        } catch (std::string err_log) {
+            execute_error_hint_morph("IMAGE_MORPH Catch: ", err_log);
+        }
         std::cout << "Finished Frame " << i << std::endl;
     }
 
     /* copy last frame to basename_xxx.bw */
     std::ostringstream oss;
     oss << basename << "_" << frame_num << ".obj" << std::endl;
-    img_pro.save_image_as_object(name, I2);
+    try {
+        img_pro.save_image_as_object(name, I2);
+    } catch (std::string err_log) {
+    execute_error_hint_morph("IMAGE_MORPH Catch: ", err_log);
+    }
     std::stringstream strstream;
     strstream << frame_num;
     execute_error_hint_morph("Morph Succeed", "Finished Frame " + strstream.str());

@@ -9,8 +9,15 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
         // Using Qt Message Box
     }
 
-    image_util img_utl = image_util("/Users/aUcid/Desktop/image_morphing/image/");
-    image_io_processor img_pro = image_io_processor("/Users/aUcid/Desktop/image_morphing/image/");
+    image_util img_utl;
+    image_io_processor img_pro;
+
+    try {
+        img_utl = image_util("/Users/aUcid/Desktop/image_morphing/image/");
+        img_pro = image_io_processor("/Users/aUcid/Desktop/image_morphing/image/");
+    } catch (std::string err_log) {
+        execute_error_hint_meshwarp("IMAGE_MESHWARP Catch: ", err_log);
+    }
 
     int I_w = I1->width,
         I_h = I1->height,

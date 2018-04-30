@@ -23,9 +23,19 @@ bool image_merger::merg_image(std::string img_name) {
         execute_error_hint("IMAGE_MERGER Error", "Received empty string as file path");
         return false;
     }
-    IplImage *r_channel = img_pro.load_image_as_object(path + "r.bw"),
-             *g_channel = img_pro.load_image_as_object(path + "g.bw"),
-             *b_channel = img_pro.load_image_as_object(path + "b.bw");
+
+    IplImage *r_channel,
+             *g_channel,
+             *b_channel;
+
+    try {
+        r_channel = img_pro.load_image_as_object(path + "r.bw");
+        g_channel = img_pro.load_image_as_object(path + "g.bw");
+        b_channel = img_pro.load_image_as_object(path + "b.bw");
+    } catch (std::string err_log) {
+        execute_error_hint("IMAGE_MERGER Catch", err_log);
+        return false;
+    }
 
     res_img = img_pro.init_image(cvGetSize(r_channel), IPL_DEPTH_8U, 3);
 
