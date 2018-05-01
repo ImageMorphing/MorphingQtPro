@@ -66,7 +66,7 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
             yrow[v] = *ycol;
 
         try {
-            catmullRom(x1, x2, M_w, indx, map, I_w);
+            catmullRom(yrow, xrow, M_h, indx, map, I_h);
         } catch (std::string err_log) {
             delete img_pro;
             delete img_utl;
@@ -93,7 +93,7 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
             yrow[v] = *ycol;
 
         try {
-            catmullRom(x1, x2, M_w, indx, map, I_w);
+            catmullRom(yrow, xrow, M_h, indx, map, I_h);
         } catch (std::string err_log) {
             delete img_pro;
             delete img_utl;
@@ -113,6 +113,7 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
     x2  = (float *) Mx->ch[1];
     src = I1->imageData;
     dst = I3->imageData;
+
     for (int x = 0; x < I_w; x ++)
         indx[x] = x;
     for (int y = 0; y < I_h; y ++) {
@@ -158,7 +159,7 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
     for (int v = 0; v < M_h; v ++) {
         /* scan convert horizontal splines */
         try {
-            catmullRom(x1, x2, M_w, indx, map, I_w);
+            catmullRom(x1, y1, M_w, indx, y2, I_w);
         } catch (std::string err_log) {
             delete img_pro;
             delete img_utl;
@@ -181,7 +182,7 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
     for (int v = 0; v < M_h; v ++) {
         /* scan convert horizontal splines */
         try {
-            catmullRom(x1, x2, M_w, indx, map, I_w);
+            catmullRom(x1, y1, M_w, indx, y2, I_w);
         } catch (std::string err_log) {
             delete img_pro;
             delete img_utl;
@@ -213,7 +214,7 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
 
         /* fit spline to y-intercepts; resample over all rows */
         try {
-            catmullRom(x1, x2, M_w, indx, map, I_w);
+            catmullRom(xrow, yrow, M_h, indx, map, I_h);
         } catch (std::string err_log) {
             delete img_pro;
             delete img_utl;
