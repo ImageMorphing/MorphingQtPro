@@ -21,6 +21,10 @@ public:
     void loadNewImage(QPixmap *image);
     void deleteImage();
 
+public slots:
+    void showMesh(int size);
+    void hideMesh();
+
 private:
     Mesh *listOfImage[2];
     Mesh *choosenImage;

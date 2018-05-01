@@ -36,7 +36,8 @@ SOURCES += \
     image_meshwarp.cpp \
     image_merger.cpp \
     image_io_processor.cpp \
-    catmullrom.cpp
+    catmullrom.cpp \
+    meshtabwidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -51,7 +52,8 @@ HEADERS += \
     image_meshwarp.h \
     image_merger.h \
     image_io_processor.h \
-    catmullrom.h
+    catmullrom.h \
+    meshtabwidget.h
 
 FORMS += \
         mainwindow.ui
@@ -59,7 +61,7 @@ FORMS += \
 INCLUDEPATH += /usr/local/include
 INCLUDEPATH += /usr/local/include/opencv
 INCLUDEPATH += /usr/local/include/opencv2
-LIBS += -L/usr/local/Cellar/opencv/3.4.1_4/lib \
+LIBS += -L/usr/local/lib \
  -lopencv_stitching \
  -lopencv_superres \
  -lopencv_videostab \
