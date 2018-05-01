@@ -6,9 +6,10 @@
 Widget::Widget(QWidget *parent):QWidget(parent)
 {
     setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
-    listOfLabel[0] = NULL;
-    listOfLabel[1] = NULL;
-    choosenLabel = NULL;
+    listOfImage[0] = NULL;
+    if(listOfImage[0] != NULL);
+    listOfImage[1] = NULL;
+    choosenImage = NULL;
 }
 
 bool Widget::eventFilter(QObject *, QEvent *evt)
@@ -18,18 +19,19 @@ bool Widget::eventFilter(QObject *, QEvent *evt)
     if(evt->type() == QEvent::MouseButtonPress)
     {
         QMouseEvent* e = static_cast<QMouseEvent*>(evt);
-        if(QRect(choosenLabel->mapToGlobal(QPoint(0, 0)), QSize(choosenLabel->width(), choosenLabel->height())).contains(e->globalPos()))
-            if(choosenLabel->rect().contains(e->pos())){
-                lastPnt = e->pos();
+        if(QRect(choosenImage->mapToGlobal(QPoint(0, 0)), QSize(choosenImage->width(), choosenImage->height())).contains(e->globalPos()))
+            if(choosenImage->rect().contains(e->pos())){
+                lastPnt = e->globalPos();
                 isHover = true;
             }
     }
     else if(evt->type() == QEvent::MouseMove && isHover)
     {
         QMouseEvent* e = static_cast<QMouseEvent*>(evt);
-        int dx = e->pos().x() - lastPnt.x();
-        int dy = e->pos().y() - lastPnt.y();
-        choosenLabel->move(choosenLabel->x() + dx, choosenLabel->y() + dy);
+        int dx = e->globalPos().x() - lastPnt.x();
+        int dy = e->globalPos().y() - lastPnt.y();
+        choosenImage->move(choosenImage->x() + dx, choosenImage->y() + dy);
+        lastPnt = e->globalPos();
     }else if(evt->type() == QEvent::MouseButtonRelease && isHover)
     {
         isHover = false;
@@ -37,66 +39,62 @@ bool Widget::eventFilter(QObject *, QEvent *evt)
     return false;
 }
 
-void Widget::CreateLabel(QPixmap *image)
+void Widget::CreateImage(QPixmap *image)
 {
-    QLabel *label = new QLabel(this);
-    label->setScaledContents(true);
-    label->setPixmap(*image);
-    label->resize(100, 100);
-    label->installEventFilter(this);
-    label->show();
-    choosenLabel = label;
-    if(listOfLabel[0] == NULL)
-        listOfLabel[0] = label;
-    else if (listOfLabel[1] == NULL)
-        listOfLabel[1] = label;
-    Mesh *mesh = new Mesh(label->size(), this);
+    installEventFilter(this);
+    Mesh *mesh = new Mesh(image->size(), image, this);
     mesh->show();
+    choosenImage = mesh;
+    if(listOfImage[0] == NULL)
+        listOfImage[0] = mesh;
+    else if(listOfImage[1] == NULL)
+        listOfImage[1] = mesh;
 }
 
-void Widget::chooseLabel(int num){
-    if(listOfLabel[num] != NULL){
-        choosenLabel = listOfLabel[num];
-        choosenLabel->raise();
+void Widget::chooseImage(int num){
+    if(listOfImage[num] != NULL){
+        choosenImage = listOfImage[num];
+        choosenImage->raise();
     }
+    qDebug() << num;
 }
 
 void Widget::scaleUpImage()
 {
-    if(choosenLabel != NULL){
-        int width = choosenLabel->width(), height = choosenLabel->height();
-        choosenLabel->resize(width * 1.1, height * 1.1);
+    if(choosenImage != NULL){
+        int width = choosenImage->width(), height = choosenImage->height();
+        choosenImage->resize(width * 1.1, height * 1.1);
     }
 }
 
 void Widget::scalDownImage()
 {
-    if(choosenLabel != NULL){
-        int width = choosenLabel->width(), height = choosenLabel->height();
-        choosenLabel->resize(width * 0.9, height * 0.9);
+    if(choosenImage != NULL){
+        int width = choosenImage->width(), height = choosenImage->height();
+        choosenImage->resize(width * 0.9, height * 0.9);
     }
 }
 
 void Widget::loadNewImage(QPixmap *image)
 {
-    if(choosenLabel != NULL){
-        choosenLabel->setPixmap(*image);
+    if(choosenImage != NULL){
+        choosenImage->setNewImage(image);
     }
 }
 
 void Widget::deleteImage()
 {
-    if(choosenLabel != NULL){
-        if(listOfLabel[0] == choosenLabel)
-            listOfLabel[0] = NULL;
-        else if(listOfLabel[1] == choosenLabel)
-            listOfLabel[1] = NULL;
-        delete choosenLabel;
-        choosenLabel = NULL;
-        if(listOfLabel[0] != NULL)
-            choosenLabel = listOfLabel[0];
-        else if(listOfLabel[1] != NULL)
-            choosenLabel = listOfLabel[1];
+    if(choosenImage != NULL){
+        if(listOfImage[0] == choosenImage)
+            listOfImage[0] = NULL;
+        else if(listOfImage[1] == choosenImage)
+            listOfImage[1] = NULL;
+        delete choosenImage;
+        choosenImage = NULL;
+        if(listOfImage[0] != NULL)
+            choosenImage = listOfImage[0];
+        else if(listOfImage[1] != NULL)
+            choosenImage = listOfImage[1];
     }
 }
 

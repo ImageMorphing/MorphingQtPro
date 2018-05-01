@@ -14,16 +14,16 @@ protected slots:
     bool eventFilter(QObject *, QEvent *);
 
 public:
-    void CreateLabel(QPixmap *image);
-    void chooseLabel(int num);
+    void CreateImage(QPixmap *image);
+    void chooseImage(int num);
     void scaleUpImage();
     void scalDownImage();
     void loadNewImage(QPixmap *image);
     void deleteImage();
 
 private:
-    QLabel *listOfLabel[2];
-    QLabel *choosenLabel;
+    Mesh *listOfImage[2];
+    Mesh *choosenImage;
     int numOfChoosenLabel;
 };
 #endif // WIDGET_H
