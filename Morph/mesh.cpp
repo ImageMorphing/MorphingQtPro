@@ -1,29 +1,40 @@
 #include "mesh.h"
 
-Mesh::Mesh(QSize size, QWidget *parent, int num) : QWidget(parent)
+Mesh::Mesh(QSize size, QPixmap *image, QWidget *parent, int num) : QWidget(parent)
 {
     sizeOfMesh = num;
     resize(size);
-//    setContentsMargins(-10, -10, -10, -10);
-
-    listOfPoints = new PointButton*[num];
-    for(int i = 0; i < num; ++i)
-        listOfPoints[i] = new PointButton[num];
+    setContentsMargins(0, 0, 0, 0);
+    listOfButton = new PointButton**[num];
+    for(int i = 0; i < num; ++i){
+        listOfButton[i] = new PointButton*[num];
+        for(int j = 0; j < num; ++j)
+            listOfButton[i][j] = new PointButton(i, j, this);
+    }
     for(int i = 0; i < num; ++i)
         for(int j = 0; j < num; ++j){
-            listOfPoints[i][j].x = j/num;
-            listOfPoints[i][j].y = i/num;
+            listOfButton[i][j]->x = j/(float)(num-1);
+            listOfButton[i][j]->y = i/(float)(num-1);
+            listOfButton[i][j]->moveTo(listOfButton[i][j]->x * size.width(), listOfButton[i][j]->y * size.height());
+            listOfButton[i][j]->show();
         }
 
-    layout_points = new QGridLayout();
-    for(int i = 0; i < num; ++i)
-        for(int j = 0; j < num; ++j)
-            layout_points->addWidget(&listOfPoints[i][j], i, j);
-    setLayout(layout_points);
+    QPalette pal;
+    pal.setBrush(backgroundRole(), QBrush(*image));
+    setAutoFillBackground(true);
+    setPalette(pal);
+    move(10, 10);
 }
 
 Mesh::~Mesh()
 {
     for(int i = 0; i < sizeOfMesh; ++i)
-        delete[] listOfPoints[i];
+        delete[] listOfButton[i];
+}
+
+void Mesh::setNewImage(QPixmap *image)
+{
+    QPalette pal;
+    pal.setBrush(backgroundRole(), QBrush(*image));
+    setPalette(pal);
 }
