@@ -16,6 +16,9 @@ public:
     ~Mesh();
     void setNewImage(QPixmap *image);
 
+    void showButton(int size);
+    void hideButton();
+
 private:
     PointButton ***listOfButton;
     QGridLayout *layout_points;

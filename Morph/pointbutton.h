@@ -5,13 +5,18 @@
 #include <QPushButton>
 #include <QRect>
 #include <QRegion>
+#include <QPoint>
 #include <QDebug>
+#include <QMouseEvent>
 
 class PointButton : public QPushButton
 {
     Q_OBJECT
 public:
     explicit PointButton(int x, int y, QWidget *parent = 0);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
 
 public:
     float x, y;
@@ -19,7 +24,9 @@ public:
     int indexX, indexY;
     int sizeW, sizeH;
 
-signals:
+private:
+    bool isHover;
+    QPoint dPos;
 
 public slots:
 };

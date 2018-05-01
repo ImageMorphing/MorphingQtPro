@@ -130,14 +130,17 @@ void MainWindow::configureImageSetting(){
 
 void MainWindow::configurePointSetting(){
     QTabWidget *tab = new QTabWidget();
-    QWidget *meshTab, *pointsTab, *contourTab;
-    meshTab = new QWidget();
+    QWidget *pointsTab, *contourTab;
+    meshTabWidget *meshTab = new meshTabWidget(tab->size(), tab);
+//    meshTab = new QWidget();
     pointsTab = new QWidget();
     contourTab = new QWidget();
     tab->addTab(meshTab, "网格");
     tab->addTab(pointsTab, "选点");
     tab->addTab(contourTab, "轮廓");
     layout_pointsSetting->addWidget(tab);
+    connect(meshTab, &meshTabWidget::startChoosing, customWidget, &Widget::showMesh);
+    connect(meshTab, &meshTabWidget::finishChoosing, customWidget, &Widget::hideMesh);
 }
 
 void MainWindow::slot_sourceImageButtonClicked(){
