@@ -4,7 +4,7 @@ image_merger::image_merger(std::string file_addr)
     try : img_pro(file_addr) {
         if (file_addr.empty()) {
             std::cout << stderr << "Empty Str Received" << std::endl;
-            throw "IMAGE_MERGER Error, Received empty string as file path";
+            throw std::string("IMAGE_MERGER Error, Received empty string as file path");
         }
         if (file_addr[file_addr.size() - 1] != '/') {
             file_addr += '/';

@@ -3,7 +3,7 @@
 image_io_processor::image_io_processor(std::string file_addr) {
     if (file_addr.empty()) {
         std::cout << stderr << "Empty Str Received" << std::endl;
-        throw "IMAGE_IO_PROCESSOR Error, Received empty string as file path";
+        throw std::string("IMAGE_IO_PROCESSOR Error, Received empty string as file path");
     }
     if (file_addr[file_addr.size() - 1] != '/') {
         file_addr += '/';

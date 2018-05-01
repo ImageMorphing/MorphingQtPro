@@ -4,7 +4,7 @@ image_seperator::image_seperator(std::string file_addr)
     try : img_pro(file_addr) {
         if (file_addr.empty()) {
             std::cout << stderr << "Empty Str Received" << std::endl;
-            throw "IMAGE_SEPERATOR Error, Received empty string as file path";
+            throw std::string("IMAGE_SEPERATOR Error, Received empty string as file path");
         }
         if (file_addr[file_addr.size() - 1] != '/') {
             file_addr += '/';

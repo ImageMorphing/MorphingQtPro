@@ -64,7 +64,15 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
             xrow[v] = *xcol;
         for (int v = 0; v < M_h; v ++, ycol += M_w)
             yrow[v] = *ycol;
-        catmullRom(yrow, xrow, M_h, indx, map, I_h);
+
+        try {
+            catmullRom(x1, x2, M_w, indx, map, I_w);
+        } catch (std::string err_log) {
+            delete img_pro;
+            delete img_utl;
+            execute_error_hint_meshwarp("IMAGE_MESHWARP Catch: ", err_log);
+            return false;
+        }
 
         /* store resampled row back into column */
         for (int y = 0; y < I_h; y ++, coll += M_w)
@@ -83,7 +91,15 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
             xrow[v] = *xcol;
         for (int v = 0; v < M_h; v ++, ycol += M_w)
             yrow[v] = *ycol;
-        catmullRom(yrow, xrow, M_h, indx, map, I_h);
+
+        try {
+            catmullRom(x1, x2, M_w, indx, map, I_w);
+        } catch (std::string err_log) {
+            delete img_pro;
+            delete img_utl;
+            execute_error_hint_meshwarp("IMAGE_MESHWARP Catch: ", err_log);
+            return false;
+        }
 
         /* store resampled row back into column */
         for (int y = 0; y < I_h; y ++, coll += M_w)
@@ -101,7 +117,14 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
         indx[x] = x;
     for (int y = 0; y < I_h; y ++) {
         /* fit spline to x-intercepts; resample over all cols */
-        catmullRom(x1, x2, M_w, indx, map, I_w);
+        try {
+            catmullRom(x1, x2, M_w, indx, map, I_w);
+        } catch (std::string err_log) {
+            delete img_pro;
+            delete img_utl;
+            execute_error_hint_meshwarp("IMAGE_MESHWARP Catch: ", err_log);
+            return false;
+        }
 
         /* resample source row based on map */
         resample(src, I_w, 1, map, dst);
@@ -134,7 +157,14 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
     /* visit each horizontal spline */
     for (int v = 0; v < M_h; v ++) {
         /* scan convert horizontal splines */
-        catmullRom(x1, y1, M_w, indx, y2, I_w);
+        try {
+            catmullRom(x1, x2, M_w, indx, map, I_w);
+        } catch (std::string err_log) {
+            delete img_pro;
+            delete img_utl;
+            execute_error_hint_meshwarp("IMAGE_MESHWARP Catch: ", err_log);
+            return false;
+        }
 
         /* advance pointers to next row */
         x1 += M_w;
@@ -150,7 +180,14 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
     /* visit each horizontal spline   */
     for (int v = 0; v < M_h; v ++) {
         /* scan convert horizontal splines */
-        catmullRom(x1, y1, M_w, indx, y2, I_w);
+        try {
+            catmullRom(x1, x2, M_w, indx, map, I_w);
+        } catch (std::string err_log) {
+            delete img_pro;
+            delete img_utl;
+            execute_error_hint_meshwarp("IMAGE_MESHWARP Catch: ", err_log);
+            return false;
+        }
 
         /* advance pointers to next row */
         x1 += M_w;
@@ -175,7 +212,14 @@ bool image_meshwarp(const IplImage* I1, const image_ptr M1, const image_ptr M2, 
             yrow[v] = *ycol;
 
         /* fit spline to y-intercepts; resample over all rows */
-        catmullRom(xrow, yrow, M_h, indx, map, I_h);
+        try {
+            catmullRom(x1, x2, M_w, indx, map, I_w);
+        } catch (std::string err_log) {
+            delete img_pro;
+            delete img_utl;
+            execute_error_hint_meshwarp("IMAGE_MESHWARP Catch: ", err_log);
+            return false;
+        }
 
         /* resample source column based on map */
         resample(src, I_h, I_w, map, dst);

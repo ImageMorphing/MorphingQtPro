@@ -14,10 +14,10 @@ void catmullRom(float *x1, float *y1, int len1, float *x2, float *y2, int len2) 
         if (x2[0] > x1[0] || x2[len2-1] < x1[len1-1]) dir = 0;
         else dir = -1;
     }
+
     if (dir == 0) {   /* error */
         std::cerr << "catmullRom: Output x-coord out of range of input\n";
-        execute_error_hint_callmullrom("CATMULLROM Error", "catmullRom: Output x-coord out of range of input");
-        return;
+        throw std::string("CATMULLROM Error", "catmullRom: Output x-coord out of range of input");
     }
 
     /* p1 is first endpoint of interval
@@ -27,7 +27,7 @@ void catmullRom(float *x1, float *y1, int len1, float *x2, float *y2, int len2) 
      */
 
     /* force coefficient initialization */
-    if (dir==1) p3 = x2[0] - 1;
+    if (dir == 1) p3 = x2[0] - 1;
     else  p3 = x2[0] + 1;
 
     for (int i = 0; i < len2; i ++) {
@@ -65,25 +65,5 @@ void catmullRom(float *x1, float *y1, int len1, float *x2, float *y2, int len2) 
         /* use Horner's rule to calculate cubic polynomial */
         x = p2 - p1;
         y2[i] = ((a3y * x + a2y) * x + a1y) * x + a0y;
-    }
-}
-
-void execute_error_hint_callmullrom(std::string text, std::string informative_text, std::string detailed_text) {
-    QMessageBox msg_box;
-    msg_box.setText(QString(text.c_str()));
-    msg_box.setInformativeText(QString(informative_text.c_str()));
-    if (!detailed_text.empty())
-        msg_box.setDetailedText(QString(detailed_text.c_str()));
-    msg_box.setStandardButtons(QMessageBox::Ok);
-    msg_box.setDefaultButton(QMessageBox::Ok);
-
-    int ret = msg_box.exec();
-    switch (ret) {
-    case QMessageBox::Ok:
-        std::cout << "Ok" << std::endl;;
-        break;
-    default:
-        assert("Unexpected Button Type");
-        break;
     }
 }

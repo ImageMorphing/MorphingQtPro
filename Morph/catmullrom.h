@@ -10,6 +10,4 @@
 
 void catmullRom(float *x1, float *y1, int len1, float *x2, float *y2, int len2);
 
-void execute_error_hint_callmullrom(std::string text, std::string informative_text, std::string detailed_text = "");
-
 #endif // CATMULLROM_H
