@@ -28,13 +28,30 @@ SOURCES += \
         mainwindow.cpp \
     widget.cpp \
     pointbutton.cpp \
-    mesh.cpp
+    mesh.cpp \
+    main_component.cpp \
+    image_util.cpp \
+    image_seperator.cpp \
+    image_morph.cpp \
+    image_meshwarp.cpp \
+    image_merger.cpp \
+    image_io_processor.cpp \
+    catmullrom.cpp
 
 HEADERS += \
         mainwindow.h \
     widget.h \
     pointbutton.h \
-    mesh.h
+    mesh.h \
+    typedef_cxx.h \
+    main_component.h \
+    image_util.h \
+    image_seperator.h \
+    image_morph.h \
+    image_meshwarp.h \
+    image_merger.h \
+    image_io_processor.h \
+    catmullrom.h
 
 FORMS += \
         mainwindow.ui
@@ -42,8 +59,43 @@ FORMS += \
 INCLUDEPATH += /usr/local/include
 INCLUDEPATH += /usr/local/include/opencv
 INCLUDEPATH += /usr/local/include/opencv2
-LIBS += -L/usr/local/lib\
-        -lopencv_core\
-        -lopencv_highgui\
-        -lopencv_imgproc\
-        -lopencv_imgcodecs
+LIBS += -L/usr/local/Cellar/opencv/3.4.1_4/lib \
+ -lopencv_stitching \
+ -lopencv_superres \
+ -lopencv_videostab \
+ -lopencv_aruco \
+ -lopencv_bgsegm \
+ -lopencv_bioinspired \
+ -lopencv_ccalib \
+ -lopencv_dnn \
+ -lopencv_dpm \
+ -lopencv_fuzzy \
+ -lopencv_line_descriptor \
+ -lopencv_optflow \
+ -lopencv_plot \
+ -lopencv_reg \
+ -lopencv_saliency \
+ -lopencv_stereo \
+ -lopencv_structured_light \
+ -lopencv_rgbd \
+ -lopencv_surface_matching \
+ -lopencv_tracking \
+ -lopencv_datasets \
+ -lopencv_face \
+ -lopencv_xfeatures2d \
+ -lopencv_shape \
+ -lopencv_video \
+ -lopencv_ximgproc \
+ -lopencv_calib3d \
+ -lopencv_features2d \
+ -lopencv_flann \
+ -lopencv_xobjdetect \
+ -lopencv_objdetect \
+ -lopencv_ml \
+ -lopencv_xphoto \
+ -lopencv_highgui \
+ -lopencv_videoio \
+ -lopencv_imgcodecs \
+ -lopencv_photo \
+ -lopencv_imgproc \
+ -lopencv_core
