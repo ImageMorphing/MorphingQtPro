@@ -53,7 +53,7 @@ void MainWindow::slot_loadImage()
 {
     QStringList fileNames= loadFilePath();
     newSubWinAfterLoadImage(fileNames);
-    setChoosenLabel(numOfLabel);
+    setChoosenLabel(numOfLabel-1);
 }
 
 QStringList MainWindow::loadFilePath(){
@@ -85,7 +85,7 @@ void MainWindow::newSubWinAfterLoadImage(QStringList paths)
         QMessageBox::information(NULL, "提示", "请选择图片", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
         return;
     }
-    customWidget->CreateLabel(image);
+    customWidget->CreateImage(image);
     ++numOfLabel;
     }
 }
@@ -149,7 +149,8 @@ void MainWindow::slot_targetImageButtonClicked(){
 }
 
 void MainWindow::setChoosenLabel(int num){
-    this->customWidget->chooseLabel(num);
+    this->customWidget->chooseImage(num);
+//    qDebug() << num;
 }
 
 void MainWindow::slot_scaleUpButton(){
@@ -163,7 +164,6 @@ void MainWindow::slot_scaleDownButton()
 
 void MainWindow::slot_loadNewImageButton()
 {
-//    this->customWidget->loadNewImage();
     QStringList paths = loadFilePath();
     QString path = paths.at(0);
     QPixmap *image = new QPixmap(path);
