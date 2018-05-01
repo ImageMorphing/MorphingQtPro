@@ -56,7 +56,6 @@ void Widget::chooseImage(int num){
         choosenImage = listOfImage[num];
         choosenImage->raise();
     }
-    qDebug() << num;
 }
 
 void Widget::scaleUpImage()
@@ -96,6 +95,18 @@ void Widget::deleteImage()
         else if(listOfImage[1] != NULL)
             choosenImage = listOfImage[1];
     }
+}
+
+void Widget::showMesh(int size)
+{
+    if(choosenImage != NULL)
+        choosenImage->showButton(size);
+}
+
+void Widget::hideMesh()
+{
+    if(choosenImage != NULL)
+        choosenImage->hideButton();
 }
 
 

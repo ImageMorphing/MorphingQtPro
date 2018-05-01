@@ -17,6 +17,7 @@
 #include <QRadioButton>
 #include <QTabWidget>
 #include "widget.h"
+#include "meshtabwidget.h"
 
 namespace Ui {
 class MainWindow;
