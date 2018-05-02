@@ -52,8 +52,10 @@ MainWindow::~MainWindow()
 void MainWindow::slot_loadImage()
 {
     QStringList fileNames= loadFilePath();
-    newSubWinAfterLoadImage(fileNames);
-    setChoosenLabel(numOfLabel-1);
+    if(fileNames.count() > 0){
+        newSubWinAfterLoadImage(fileNames);
+        setChoosenLabel(numOfLabel-1);
+    }
 }
 
 QStringList MainWindow::loadFilePath(){
@@ -168,13 +170,15 @@ void MainWindow::slot_scaleDownButton()
 void MainWindow::slot_loadNewImageButton()
 {
     QStringList paths = loadFilePath();
-    QString path = paths.at(0);
-    QPixmap *image = new QPixmap(path);
-    if(image->isNull()){
-        QMessageBox::information(NULL, "提示", "请选择图片", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-        return;
+    if(paths.count() > 0){
+        QString path = paths.at(0);
+        QPixmap *image = new QPixmap(path);
+        if(image->isNull()){
+            QMessageBox::information(NULL, "提示", "请选择图片", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            return;
+        }
+        this->customWidget->loadNewImage(image);
     }
-    this->customWidget->loadNewImage(image);
 }
 
 void MainWindow::slot_deleteImageButton()
