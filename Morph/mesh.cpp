@@ -42,7 +42,6 @@ void Mesh::setNewImage(QPixmap *image)
 void Mesh::showButton(int size)
 {
     if(sizeOfMesh != size){
-        sizeOfMesh = size;
         for(int i = 0; i < sizeOfMesh; ++i){
             for(int j = 0; j < sizeOfMesh; ++j)
                 delete listOfButton[i][j];
@@ -50,6 +49,7 @@ void Mesh::showButton(int size)
         }
         delete listOfButton;
         listOfButton = NULL;
+        sizeOfMesh = size;
         listOfButton = new PointButton**[size];
         for(int i = 0; i < size; ++i){
             listOfButton[i] = new PointButton*[size];
