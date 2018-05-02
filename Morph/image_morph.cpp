@@ -105,7 +105,8 @@ bool image_morph(const IplImage* I1, const IplImage* I2, const image_ptr M1, con
 
     /* copy last frame to basename_xxx.bw */
     std::ostringstream oss;
-    oss << basename << "_" << frame_num << ".obj" << std::endl;
+    oss << basename << "_" << frame_num - 1 << ".obj" << std::endl;
+    name = oss.str();
     try {
         img_pro->save_image_as_object(name, I2);
     } catch (std::string err_log) {
@@ -115,7 +116,7 @@ bool image_morph(const IplImage* I1, const IplImage* I2, const image_ptr M1, con
         return false;
     }
     std::stringstream strstream;
-    strstream << frame_num;
+    strstream << frame_num - 1;
     execute_error_hint_morph("Morph Succeed", "Finished Frame " + strstream.str());
 
     delete img_pro;
