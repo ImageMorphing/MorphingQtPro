@@ -11,6 +11,8 @@ image_util::image_util(std::string file_addr) {
     }
 }
 
+image_util::image_util(){}
+
 image_util::~image_util() {}
 
 image_ptr image_util::read_image_as_bw(IplImage *img) {

@@ -7,7 +7,6 @@ Widget::Widget(QWidget *parent):QWidget(parent)
 {
     setWindowFlags(Qt::CustomizeWindowHint|Qt::FramelessWindowHint);
     listOfImage[0] = NULL;
-    if(listOfImage[0] != NULL);
     listOfImage[1] = NULL;
     choosenImage = NULL;
 }
@@ -45,10 +44,12 @@ void Widget::CreateImage(QPixmap *image)
     Mesh *mesh = new Mesh(image->size(), image, this);
     mesh->show();
     choosenImage = mesh;
-    if(listOfImage[0] == NULL)
+    if(listOfImage[0] == NULL){
         listOfImage[0] = mesh;
-    else if(listOfImage[1] == NULL)
+    }
+    else if(listOfImage[1] == NULL){
         listOfImage[1] = mesh;
+    }
 }
 
 void Widget::chooseImage(int num){
@@ -61,16 +62,15 @@ void Widget::chooseImage(int num){
 void Widget::scaleUpImage()
 {
     if(choosenImage != NULL){
-        int width = choosenImage->width(), height = choosenImage->height();
-        choosenImage->resize(width * 1.1, height * 1.1);
+        choosenImage->scaleUp();
+        qDebug() << choosenImage->size() << endl;
     }
 }
 
 void Widget::scalDownImage()
 {
     if(choosenImage != NULL){
-        int width = choosenImage->width(), height = choosenImage->height();
-        choosenImage->resize(width * 0.9, height * 0.9);
+        choosenImage->scaleDown();
     }
 }
 
@@ -95,6 +95,38 @@ void Widget::deleteImage()
         else if(listOfImage[1] != NULL)
             choosenImage = listOfImage[1];
     }
+}
+
+void Widget::storeMesh()
+{
+    if(listOfImage[0] != NULL && listOfImage[1] != NULL){
+        listOfImage[0]->storeMesh(0);
+        listOfImage[1]->storeMesh(1);
+    } else
+        QMessageBox::information(NULL, "提示", "请选择至少两张图片", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+}
+
+bool Widget::readyToLoadNew()
+{
+    if(listOfImage[0] == NULL || listOfImage[1] == NULL)
+        return true;
+    else
+        return false;
+}
+
+int Widget::sourOrDest()
+{
+    if(choosenImage == listOfImage[0])
+        return 0;
+    else if(choosenImage == listOfImage[1])
+        return 1;
+    else
+        return -1;
+}
+
+bool Widget::readyToStoreMesh()
+{
+    return (listOfImage[0] != NULL && listOfImage[1] != NULL);
 }
 
 void Widget::showMesh(int size)

@@ -9,39 +9,38 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     this->resize(QApplication::desktop()->width(), QApplication::desktop()->height());
 
-    numOfLabel = 0;
-
     //set mainWindow layout
     widget = new QWidget();
     settingWidget = new QWidget();
     customWidget = new Widget(this);
-    imageSettingWidget = new QWidget();
-    pointSettingWidget = new QWidget();
-    layout_main = new QHBoxLayout();
+    imageSetting = new imageSettingWidget(this);
+    pointSetting = new pointSettingWidget(this);
+    layout_main = new QGridLayout();
     layout_imageSetting = new QGridLayout();
     layout_setting = new QGridLayout();
     layout_pointsSetting = new QGridLayout();
+    startMorphing = new QPushButton();
 
-    settingWidget->setFixedWidth(230);
+    QWidget *tmpWid = new QWidget(this);
+    QGridLayout *layout_tmpWid = new QGridLayout();
+    tmpWid->setFixedWidth(230);
+    layout_tmpWid->addWidget(imageSetting, 0, 0, 3, 1);
+    layout_tmpWid->addWidget(pointSetting, 3, 0, 5, 1);
+    layout_tmpWid->addWidget(startMorphing, 8, 0, 1, 1);
+    tmpWid->setLayout(layout_tmpWid);
+
     customWidget->show();
+    startMorphing->setText("Start");
 
-    layout_main->addWidget(settingWidget);
-    layout_main->addWidget(customWidget);
-
-    configureImageSetting();
-    configurePointSetting();
-
-    imageSettingWidget->setLayout(layout_imageSetting);
-    pointSettingWidget->setLayout(layout_pointsSetting);
-    layout_setting->addWidget(imageSettingWidget);
-    layout_setting->addWidget(pointSettingWidget);
-    settingWidget->setLayout(layout_setting);
-
-
+    layout_main->addWidget(tmpWid, 0, 0);
+    layout_main->addWidget(customWidget, 0, 1);
     widget->setLayout(layout_main);
     this->setCentralWidget(widget);
 
     connect(ui->load, SIGNAL(triggered()), this, SLOT(slot_loadImage()));
+    connect(startMorphing, &QPushButton::clicked, this, &MainWindow::Morphing);
+    connectSigAndSlot();
+    configureDir();
 }
 
 MainWindow::~MainWindow()
@@ -52,8 +51,27 @@ MainWindow::~MainWindow()
 void MainWindow::slot_loadImage()
 {
     QStringList fileNames= loadFilePath();
-    newSubWinAfterLoadImage(fileNames);
-    setChoosenLabel(numOfLabel-1);
+    if(fileNames.count() > 0){
+        newSubWinAfterLoadImage(fileNames);
+    }
+}
+
+void MainWindow::slot_loadNewImage()
+{
+    QStringList fileName = loadFilePath();
+    if(fileName.count() > 0){
+        QString path = fileName.at(0);
+        QPixmap *image = new QPixmap(path);
+        if(!image->isNull()){
+            customWidget->loadNewImage(image);
+            imageSetting->changeIcononChangingImage(image);
+            if(customWidget->sourOrDest() == 0)
+                sourcePath = path;
+            else if(customWidget->sourOrDest() == 1)
+                targetPath = path;
+        }else
+            QMessageBox::information(NULL, "提示", "请选择图片", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    }
 }
 
 QStringList MainWindow::loadFilePath(){
@@ -61,8 +79,6 @@ QStringList MainWindow::loadFilePath(){
     fileDialog->setWindowTitle(tr("打开图片"));
     fileDialog->setDirectory(".");
     fileDialog->setNameFilter(tr("Images(*.png *.jpg *.jpeg *.bmp)"));
-    //设置可以选择多个文件,默认为只能选择一个文件QFileDialog::ExistingFiles
-//    fileDialog->setFileMode(QFileDialog::ExistingFiles);
     fileDialog->setViewMode(QFileDialog::Detail);
     QStringList fileNames;
     if(fileDialog->exec())
@@ -72,113 +88,89 @@ QStringList MainWindow::loadFilePath(){
 
 void MainWindow::newSubWinAfterLoadImage(QStringList paths)
 {
-    if(numOfLabel >= 2){
+    if(!customWidget->readyToLoadNew()){
         QMessageBox::information(NULL, "提示", "导入的图片不能超过两个", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
         return;
     }
     //根据路径载入图片
     //需要修改：多选图片时
     if(paths.count() > 0){
-    QString path = paths.at(0);
-    QPixmap *image = new QPixmap(path);
-    if(image->isNull()){
-        QMessageBox::information(NULL, "提示", "请选择图片", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-        return;
+        QString path = paths.at(0);
+        QPixmap *image = new QPixmap(path);
+        if(!image->isNull()){
+            customWidget->CreateImage(image);
+            imageSetting->changeIcononLoadingNew(image);
+            if(customWidget->sourOrDest() == 0)
+                sourcePath = path;
+            else if(customWidget->sourOrDest() == 1)
+                targetPath = path;
+        }else
+            QMessageBox::information(NULL, "提示", "请选择图片", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
     }
-    customWidget->CreateImage(image);
-    ++numOfLabel;
+}
+
+void MainWindow::configureDir()
+{
+    QDir *temp = new QDir();
+    bool exist = temp->exists("../Resources/Temp");
+    if(!exist)
+        temp->mkdir("../Resources/Temp");
+}
+
+bool MainWindow::copyResource()
+{
+    QString sName, dName;
+    QStringList tmp1, tmp2;
+    tmp1 = sourcePath.split("/");
+    tmp2 = targetPath.split("/");
+    sName = tmp1.at(tmp1.size()-1);
+    dName = tmp2.at(tmp2.size()-1);
+    QString path = "../Resources/Temp";
+    if(!QFile::exists(path)){
+        QDir *temp = new QDir();
+        temp->mkdir("../Resources/Temp");
+    }
+    if(QFile::exists(path + QDir::separator() + sName))
+        QFile::remove(path + QDir::separator() + sName);
+    if(QFile::exists(path + QDir::separator() + dName))
+        QFile::remove(path + QDir::separator() + dName);
+    if(!QFile::copy(sourcePath, path + QDir::separator() + sName)){
+//        QMessageBox::information(NULL, "提示", "请重试", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        return false;
+    }
+    if(!QFile::copy(targetPath, path + QDir::separator() + dName)){
+//        QMessageBox::information(NULL, "提示", "请重试", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        return false;
+    }
+    return true;
+}
+
+void MainWindow::Morphing()
+{
+    if(customWidget->readyToStoreMesh()){
+        QString sName, dName;
+        QStringList tmp1, tmp2;
+        tmp1 = sourcePath.split("/");
+        tmp2 = targetPath.split("/");
+        sName = tmp1.at(tmp1.size()-1);
+        dName = tmp2.at(tmp2.size()-1);
+        customWidget->storeMesh();
+        if(!copyResource())
+            return;
+        main_component *morph = new main_component("../Resources/Temp", "job", pointSetting->numOfFrame());
+        morph->execute(sName.toStdString(), dName.toStdString());
     }
 }
 
-void MainWindow::configureImageSetting(){
-    QPushButton *sourceImageButton, *targetImageButton;
-    QPushButton *scaleUpButton, *scaleDownButton, *loadNewImageButton, *deleteImageButton;
-    sourceImageButton = new QPushButton();
-    targetImageButton = new QPushButton();
-    scaleUpButton = new QPushButton();
-    scaleDownButton = new QPushButton();
-    loadNewImageButton = new QPushButton();
-    deleteImageButton = new QPushButton();
-
-
-    sourceImageButton->setFixedSize(100, 100);
-    sourceImageButton->setText("源图片");
-    sourceImageButton->setFlat(true);
-    targetImageButton->setFixedSize(100, 100);
-    targetImageButton->setText("目标图片");
-    targetImageButton->setFlat(true);
-
-    scaleUpButton->setText("放大图片");
-    scaleDownButton->setText("缩小图片");
-    loadNewImageButton->setText("切换图片");
-    deleteImageButton->setText("删除图片");
-
-    connect(sourceImageButton, &QPushButton::clicked, this, &MainWindow::slot_sourceImageButtonClicked);
-    connect(targetImageButton, &QPushButton::clicked, this, &MainWindow::slot_targetImageButtonClicked);
-    connect(scaleUpButton, &QPushButton::clicked, this, &MainWindow::slot_scaleUpButton);
-    connect(scaleDownButton, &QPushButton::clicked, this, &MainWindow::slot_scaleDownButton);
-    connect(loadNewImageButton, &QPushButton::clicked, this, &MainWindow::slot_loadNewImageButton);
-    connect(deleteImageButton, &QPushButton::clicked, this, &MainWindow::slot_deleteImageButton);
-
-    this->layout_imageSetting->addWidget(sourceImageButton, 0, 0);
-    this->layout_imageSetting->addWidget(targetImageButton, 0, 1);
-    this->layout_imageSetting->addWidget(scaleUpButton, 1, 0);
-    this->layout_imageSetting->addWidget(scaleDownButton, 1, 1);
-    this->layout_imageSetting->addWidget(loadNewImageButton, 2, 0);
-    this->layout_imageSetting->addWidget(deleteImageButton, 2, 1);
-}
-
-void MainWindow::configurePointSetting(){
-    QTabWidget *tab = new QTabWidget();
-    QWidget *pointsTab, *contourTab;
-    meshTabWidget *meshTab = new meshTabWidget(tab->size(), tab);
-//    meshTab = new QWidget();
-    pointsTab = new QWidget();
-    contourTab = new QWidget();
-    tab->addTab(meshTab, "网格");
-    tab->addTab(pointsTab, "选点");
-    tab->addTab(contourTab, "轮廓");
-    layout_pointsSetting->addWidget(tab);
-    connect(meshTab, &meshTabWidget::startChoosing, customWidget, &Widget::showMesh);
-    connect(meshTab, &meshTabWidget::finishChoosing, customWidget, &Widget::hideMesh);
-}
-
-void MainWindow::slot_sourceImageButtonClicked(){
-    setChoosenLabel(0);
-}
-
-void MainWindow::slot_targetImageButtonClicked(){
-    setChoosenLabel(1);
-}
-
-void MainWindow::setChoosenLabel(int num){
-    this->customWidget->chooseImage(num);
-//    qDebug() << num;
-}
-
-void MainWindow::slot_scaleUpButton(){
-    this->customWidget->scaleUpImage();
-}
-
-void MainWindow::slot_scaleDownButton()
+void MainWindow::connectSigAndSlot()
 {
-    this->customWidget->scalDownImage();
-}
+    connect(imageSetting, &imageSettingWidget::chooseSourceImage, customWidget, &Widget::chooseImage);
+    connect(imageSetting, &imageSettingWidget::chooseDestImage, customWidget, &Widget::chooseImage);
+    connect(imageSetting, &imageSettingWidget::scaleUp, customWidget, &Widget::scaleUpImage);
+    connect(imageSetting, &imageSettingWidget::scaleDown, customWidget, &Widget::scalDownImage);
+    connect(imageSetting, &imageSettingWidget::loadNewImage, this, &MainWindow::slot_loadNewImage);
+    connect(imageSetting, &imageSettingWidget::deleteImage, customWidget, &Widget::deleteImage);
+    connect(pointSetting, &pointSettingWidget::startChoosing, customWidget, &Widget::showMesh);
+    connect(pointSetting, &pointSettingWidget::finishChoosing, customWidget, &Widget::hideMesh);
 
-void MainWindow::slot_loadNewImageButton()
-{
-    QStringList paths = loadFilePath();
-    QString path = paths.at(0);
-    QPixmap *image = new QPixmap(path);
-    if(image->isNull()){
-        QMessageBox::information(NULL, "提示", "请选择图片", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-        return;
-    }
-    this->customWidget->loadNewImage(image);
-}
-
-void MainWindow::slot_deleteImageButton()
-{
-    this->customWidget->deleteImage();
-    numOfLabel--;
 }
