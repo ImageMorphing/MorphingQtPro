@@ -96,85 +96,7 @@ void MainWindow::newSubWinAfterLoadImage(QStringList paths)
     if(paths.count() > 0){
         QString path = paths.at(0);
         QPixmap *image = new QPixmap(path);
-        if(image->isNull()){
-            QMessageBox::information(NULL, "提示", "请选择图片", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-            return;
-        }
-        customWidget->CreateImage(image);
-        ++numOfLabel;
-    }
-}
-
-void MainWindow::configureImageSetting(){
-    QPushButton *sourceImageButton, *targetImageButton;
-    QPushButton *scaleUpButton, *scaleDownButton, *loadNewImageButton, *deleteImageButton;
-    sourceImageButton = new QPushButton();
-    targetImageButton = new QPushButton();
-    scaleUpButton = new QPushButton();
-    scaleDownButton = new QPushButton();
-    loadNewImageButton = new QPushButton();
-    deleteImageButton = new QPushButton();
-
-
-    sourceImageButton->setFixedSize(100, 100);
-    sourceImageButton->setText("源图片");
-    sourceImageButton->setFlat(true);
-    targetImageButton->setFixedSize(100, 100);
-    targetImageButton->setText("目标图片");
-    targetImageButton->setFlat(true);
-
-    scaleUpButton->setText("放大图片");
-    scaleDownButton->setText("缩小图片");
-    loadNewImageButton->setText("切换图片");
-    deleteImageButton->setText("删除图片");
-
-    connect(sourceImageButton, &QPushButton::clicked, this, &MainWindow::slot_sourceImageButtonClicked);
-    connect(targetImageButton, &QPushButton::clicked, this, &MainWindow::slot_targetImageButtonClicked);
-    connect(scaleUpButton, &QPushButton::clicked, this, &MainWindow::slot_scaleUpButton);
-    connect(scaleDownButton, &QPushButton::clicked, this, &MainWindow::slot_scaleDownButton);
-    connect(loadNewImageButton, &QPushButton::clicked, this, &MainWindow::slot_loadNewImageButton);
-    connect(deleteImageButton, &QPushButton::clicked, this, &MainWindow::slot_deleteImageButton);
-
-    this->layout_imageSetting->addWidget(sourceImageButton, 0, 0);
-    this->layout_imageSetting->addWidget(targetImageButton, 0, 1);
-    this->layout_imageSetting->addWidget(scaleUpButton, 1, 0);
-    this->layout_imageSetting->addWidget(scaleDownButton, 1, 1);
-    this->layout_imageSetting->addWidget(loadNewImageButton, 2, 0);
-    this->layout_imageSetting->addWidget(deleteImageButton, 2, 1);
-}
-
-void MainWindow::configurePointSetting(){
-    QTabWidget *tab = new QTabWidget();
-    QWidget *pointsTab, *contourTab;
-    meshTabWidget *meshTab = new meshTabWidget(tab->size(), tab);
-//    meshTab = new QWidget();
-    pointsTab = new QWidget();
-    contourTab = new QWidget();
-    tab->addTab(meshTab, "网格");
-    tab->addTab(pointsTab, "选点");
-    tab->addTab(contourTab, "人像");
-    layout_pointsSetting->addWidget(tab);
-    connect(meshTab, &meshTabWidget::startChoosing, customWidget, &Widget::showMesh);
-    connect(meshTab, &meshTabWidget::finishChoosing, customWidget, &Widget::hideMesh);
-}
-
-void MainWindow::slot_sourceImageButtonClicked(){
-    setChoosenLabel(0);
-}
-
-void MainWindow::slot_targetImageButtonClicked(){
-    setChoosenLabel(1);
-}
-
-void MainWindow::setChoosenLabel(int num){
-    this->customWidget->chooseImage(num);
-//    qDebug() << num;
-}
-
-void MainWindow::slot_scaleUpButton(){
-    this->customWidget->scaleUpImage();
-
-        if(!image->isNull()){
+        if(!image->isNull()) {
             customWidget->CreateImage(image);
             imageSetting->changeIcononLoadingNew(image);
             if(customWidget->sourOrDest() == 0)
@@ -183,6 +105,7 @@ void MainWindow::slot_scaleUpButton(){
                 targetPath = path;
         }else {
             QMessageBox::information(NULL, "提示", "请选择图片", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        }
     }
 }
 
