@@ -19,6 +19,8 @@
 #include "widget.h"
 #include "meshtabwidget.h"
 
+#include <image_portrait_processor.h>
+
 namespace Ui {
 class MainWindow;
 }

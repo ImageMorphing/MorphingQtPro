@@ -1,13 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
+    ui(new Ui::MainWindow) {
     ui->setupUi(this);
     this->resize(QApplication::desktop()->width(), QApplication::desktop()->height());
+    this->setWindowTitle(tr("Morphy"));
 
     numOfLabel = 0;
 
@@ -79,14 +78,14 @@ void MainWindow::newSubWinAfterLoadImage(QStringList paths)
     //根据路径载入图片
     //需要修改：多选图片时
     if(paths.count() > 0){
-    QString path = paths.at(0);
-    QPixmap *image = new QPixmap(path);
-    if(image->isNull()){
-        QMessageBox::information(NULL, "提示", "请选择图片", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-        return;
-    }
-    customWidget->CreateImage(image);
-    ++numOfLabel;
+        QString path = paths.at(0);
+        QPixmap *image = new QPixmap(path);
+        if(image->isNull()){
+            QMessageBox::information(NULL, "提示", "请选择图片", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            return;
+        }
+        customWidget->CreateImage(image);
+        ++numOfLabel;
     }
 }
 
@@ -137,7 +136,7 @@ void MainWindow::configurePointSetting(){
     contourTab = new QWidget();
     tab->addTab(meshTab, "网格");
     tab->addTab(pointsTab, "选点");
-    tab->addTab(contourTab, "轮廓");
+    tab->addTab(contourTab, "人像");
     layout_pointsSetting->addWidget(tab);
     connect(meshTab, &meshTabWidget::startChoosing, customWidget, &Widget::showMesh);
     connect(meshTab, &meshTabWidget::finishChoosing, customWidget, &Widget::hideMesh);

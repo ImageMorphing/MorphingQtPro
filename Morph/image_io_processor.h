@@ -13,6 +13,7 @@
 class image_io_processor {
 public:
     image_io_processor(std::string);
+    image_io_processor();
     ~image_io_processor();
 
     // file I/O related
