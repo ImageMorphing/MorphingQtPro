@@ -13,6 +13,8 @@ public:
     main_component(std::string file_addr, std::string base_name, unsigned int frame_num);
     main_component(std::string base_name, unsigned int frame_num);
 
+    main_component(std::string base_name, unsigned int frame_num);
+
     IplImage* execute_by_morph(std::string scr_image_name,
                       std::string tgt_image_name,
                       unsigned int mesh_width,

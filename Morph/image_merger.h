@@ -14,6 +14,7 @@
 class image_merger {
 public:
     image_merger(std::string);
+    image_merger();
     ~image_merger();
 
 

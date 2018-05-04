@@ -24,6 +24,8 @@
 #include "imagesettingwidget.h"
 #include "pointsettingwidget.h"
 
+#include <image_portrait_processor.h>
+
 namespace Ui {
 class MainWindow;
 }

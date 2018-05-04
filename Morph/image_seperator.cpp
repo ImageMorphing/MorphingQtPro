@@ -20,6 +20,10 @@ image_seperator::~image_seperator() {
 
 }
 
+image_seperator::image_seperator() {
+
+}
+
 bool image_seperator::sepe_image(std::string img_name) {
     if (img_name.empty()) {
         std::cout << stderr << "IMAGE_SEPERATOR Error, Received empty string as file path" << std::endl;

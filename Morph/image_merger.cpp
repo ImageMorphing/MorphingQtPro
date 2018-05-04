@@ -17,6 +17,8 @@ image_merger::image_merger(std::string file_addr)
 
 image_merger::~image_merger() {}
 
+image_merger::image_merger() {}
+
 bool image_merger::merg_image(std::string img_name) {
     if (img_name.empty()) {
         std::cout << stderr << "IMAGE_MERGER Error, Received empty string as file path" << std::endl;

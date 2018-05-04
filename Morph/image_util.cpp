@@ -15,6 +15,8 @@ image_util::image_util(){}
 
 image_util::~image_util() {}
 
+image_util::image_util() {}
+
 image_ptr image_util::read_image_as_bw(IplImage *img) {
     auto img_ptr = tran_image(img);
     if (img == 0) {

@@ -17,6 +17,10 @@ image_io_processor::~image_io_processor() {
 
 }
 
+image_io_processor::image_io_processor() {
+
+}
+
  /*
   * image_io_processor
   * file I/O related
