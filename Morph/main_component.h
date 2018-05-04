@@ -11,6 +11,7 @@
 class main_component {
 public:
     main_component(std::string file_addr, std::string base_name, unsigned int frame_num);
+    main_component(std::string base_name, unsigned int frame_num);
 
     main_component(std::string base_name, unsigned int frame_num);
 

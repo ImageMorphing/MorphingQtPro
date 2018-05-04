@@ -38,7 +38,10 @@ SOURCES += \
     image_io_processor.cpp \
     catmullrom.cpp \
     meshtabwidget.cpp \
-    image_portrait_processor.cpp
+    image_portrait_processor.cpp \
+    settingwidget.cpp \
+    imagesettingwidget.cpp \
+    pointsettingwidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -55,7 +58,10 @@ HEADERS += \
     image_io_processor.h \
     catmullrom.h \
     meshtabwidget.h \
-    image_portrait_processor.h
+    image_portrait_processor.h \
+    settingwidget.h \
+    imagesettingwidget.h \
+    pointsettingwidget.h
 
 FORMS += \
         mainwindow.ui

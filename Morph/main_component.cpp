@@ -17,9 +17,15 @@ main_component::main_component(std::string file_addr, std::string base_name, uns
         }
         this->frame_base_name = base_name;
         this->frame_num = frame_num;
-    } catch (std::string err_log) {
-        throw err_log;
-    }
+} catch (std::string err_log) {
+    throw err_log;
+}
+
+main_component::main_component::main_component(std::string base_name, unsigned int frame_num)
+{
+    this->frame_num = frame_num;
+    this->frame_base_name = base_name;
+}
 
 main_component::main_component(std::string base_name, unsigned int frame_num) {
     this->frame_num = frame_num;
