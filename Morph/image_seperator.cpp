@@ -11,8 +11,10 @@ image_seperator::image_seperator(std::string file_addr)
         }
         path = file_addr;
     } catch (std::string err_log) {
-        throw err_log;
-    }
+    throw err_log;
+}
+
+image_seperator::image_seperator(){}
 
 image_seperator::~image_seperator() {
 

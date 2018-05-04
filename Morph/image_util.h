@@ -14,6 +14,7 @@
 class image_util {
 public:
     image_util(std::string);
+    image_util();
     ~image_util();
 
     image_ptr read_image_as_bw(IplImage* img);

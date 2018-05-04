@@ -10,6 +10,7 @@
 class main_component {
 public:
     main_component(std::string file_addr, std::string base_name, unsigned int frame_num);
+    main_component(std::string base_name, unsigned int frame_num);
 
     void execute(std::string scr_image_name, std::string tgt_image_name);
 private:

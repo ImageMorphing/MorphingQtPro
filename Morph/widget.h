@@ -16,18 +16,26 @@ protected slots:
 public:
     void CreateImage(QPixmap *image);
     void chooseImage(int num);
+
+    void storeMesh();
+    bool readyToLoadNew();
+    int sourOrDest();
+    bool readyToStoreMesh();
+//    std::string getSourPath();
+//    std::string getDestPath();
+
+
+public slots:
+    void showMesh(int size);
+    void hideMesh();
     void scaleUpImage();
     void scalDownImage();
     void loadNewImage(QPixmap *image);
     void deleteImage();
 
-public slots:
-    void showMesh(int size);
-    void hideMesh();
-
 private:
     Mesh *listOfImage[2];
     Mesh *choosenImage;
-    int numOfChoosenLabel;
+
 };
 #endif // WIDGET_H

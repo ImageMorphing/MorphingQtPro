@@ -13,6 +13,7 @@ class meshTabWidget : public QWidget
     Q_OBJECT
 public:
     explicit meshTabWidget(QSize size, QWidget *parent = nullptr);
+    int numOfFrame();
 
 signals:
     void startChoosing(int);
@@ -22,7 +23,7 @@ private slots:
     void finishClicked();
 private:
     QGridLayout *layout;
-    QLineEdit *sizeOfMesh;
+    QLineEdit *lineEdit_sizeOfMesh, *lineEdit_numOfFrame;
     QPushButton *startChoose, *finishChoose;
 signals:
 

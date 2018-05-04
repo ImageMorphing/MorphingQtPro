@@ -16,8 +16,13 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QTabWidget>
+#include <string>
+#include <QFile>
 #include "widget.h"
 #include "meshtabwidget.h"
+#include "main_component.h"
+#include "imagesettingwidget.h"
+#include "pointsettingwidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -34,36 +39,32 @@ public:
 //public slots
 public slots:
     void slot_loadImage();
-    void newSubWinAfterLoadImage(QStringList paths);
-    void slot_sourceImageButtonClicked();
-    void slot_targetImageButtonClicked();
-    void slot_scaleUpButton();
-    void slot_scaleDownButton();
-    void slot_loadNewImageButton();
-    void slot_deleteImageButton();
+    void slot_loadNewImage();
 
 //private variables
 private:
     Ui::MainWindow *ui;
-
     void configureImageSetting();
     void configurePointSetting();
     void setChoosenLabel(int num);
+    void Morphing();
+    void connectSigAndSlot();
+    void newSubWinAfterLoadImage(QStringList paths);
+    void configureDir();
+    bool copyResource();
     QStringList loadFilePath();
+    QString sourcePath, targetPath;
 
-    //for layout
     QWidget *widget, *settingWidget;
-    QWidget *imageSettingWidget, *pointSettingWidget;
-
-    QHBoxLayout *layout_main;
+    imageSettingWidget *imageSetting;
+    pointSettingWidget *pointSetting;
+    QGridLayout *layout_main;
     QGridLayout *layout_setting, *layout_imageSetting, *layout_pointsSetting;
 
     //for widget
     Widget *customWidget;
-
-
-    int numOfLabel;
-    QLabel *ListOfLabels[2];
+    QPushButton *choosenButton;
+    QPushButton *startMorphing;
 };
 
 #endif // MAINWINDOW_H

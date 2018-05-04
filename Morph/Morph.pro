@@ -37,7 +37,10 @@ SOURCES += \
     image_merger.cpp \
     image_io_processor.cpp \
     catmullrom.cpp \
-    meshtabwidget.cpp
+    meshtabwidget.cpp \
+    settingwidget.cpp \
+    imagesettingwidget.cpp \
+    pointsettingwidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -53,7 +56,10 @@ HEADERS += \
     image_merger.h \
     image_io_processor.h \
     catmullrom.h \
-    meshtabwidget.h
+    meshtabwidget.h \
+    settingwidget.h \
+    imagesettingwidget.h \
+    pointsettingwidget.h
 
 FORMS += \
         mainwindow.ui

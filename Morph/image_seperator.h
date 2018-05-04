@@ -12,6 +12,7 @@
 class image_seperator {
 public:
     image_seperator(std::string);
+    image_seperator();
     ~image_seperator();
 
 

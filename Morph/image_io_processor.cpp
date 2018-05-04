@@ -11,6 +11,8 @@ image_io_processor::image_io_processor(std::string file_addr) {
     path = file_addr;
 }
 
+image_io_processor::image_io_processor(){}
+
 image_io_processor::~image_io_processor() {
 
 }
